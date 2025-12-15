@@ -1,4 +1,4 @@
-package com.miguelrivera.praesidiumnote.ui.theme
+package com.miguelrivera.praesidiumnote.presentation.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

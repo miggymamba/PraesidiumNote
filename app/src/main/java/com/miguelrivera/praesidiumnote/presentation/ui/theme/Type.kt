@@ -1,4 +1,4 @@
-package com.miguelrivera.praesidiumnote.ui.theme
+package com.miguelrivera.praesidiumnote.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
