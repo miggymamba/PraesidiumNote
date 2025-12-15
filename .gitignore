@@ -1,15 +1,57 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
+# --------------------------------------------------------------------------------------
+# Clean Architecture Project - PraesidiumNote
+# Based on official GitHub template, optimized for Kotlin/Compose/Gradle
+# --------------------------------------------------------------------------------------
+
+# --------------------
+# 1. BUILD ARTIFACTS
+# --------------------
+# Gradle files
+.gradle/
+# Build output directory
 /build
-/captures
-.externalNativeBuild
-.cxx
+# AAB/APK files
+*.aab
+*.apk
+output-metadata.json
+
+# --------------------
+# 2. LOCAL CONFIGURATION
+# --------------------
+# Local configuration file (sdk path, NDK path, etc)
 local.properties
+
+# Log/OS Files
+*.log
+.DS_Store
+
+# --------------------
+# 3. ANDROID STUDIO / INTELLIJ GENERATED FILES
+# --------------------
+# Ignores all user-specific, machine-dependent IDE files.
+# Important configuration files (like build.gradle, settings.gradle, etc.) are tracked outside of this directory.
+.idea/
+# Individual module files (these are obsolete in modern Gradle projects but are a safe ignore)
+*.iml
+# Other machine/user specific files
+deploymentTargetDropDown.xml
+render.experimental.xml
+misc.xml
+
+# --------------------
+# 4. ANDROID GENERATED ASSETS & C++
+# --------------------
+captures/
+.externalNativeBuild/
+.cxx/
+# Android Profiling
+*.hprof
+
+# --------------------
+# 5. SECURITY & SECRETS (CRITICAL)
+# --------------------
+# Keystore files
+*.jks
+*.keystore
+# Google Services (Firebase/API keys)
+google-services.json
