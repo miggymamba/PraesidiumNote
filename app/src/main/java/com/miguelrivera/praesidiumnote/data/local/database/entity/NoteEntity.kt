@@ -1,4 +1,4 @@
-package com.miguelrivera.praesidiumnote.data.local.entity
+package com.miguelrivera.praesidiumnote.data.local.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
