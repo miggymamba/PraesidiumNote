@@ -13,9 +13,19 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
+/**
+ * Qualifier for identifying the IO Dispatcher within the DI graph.
+ * This prevents ambiguity if we add different dispatchers later.
+ */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class IoDispatcher
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DatabaseModule {
@@ -29,6 +39,17 @@ abstract class DatabaseModule {
     abstract fun bindNoteRepository(noteRepositoryImpl: NoteRepositoryImpl): NoteRepository
 
     companion object {
+        /**
+         * Provides the IO Dispatcher.
+         * * Design Choice: Co-located here because the Database/Repository layer
+         * is currently the primary consumer of IO operations.
+         * This avoids creating a separate file for a single provider (YAGNI).
+         */
+        @IoDispatcher
+        @Provides
+        @Singleton
+        fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
         @Provides
         @Singleton
         fun provideDatabase(@ApplicationContext context: Context, passphraseManager: PassphraseManager): NoteDatabase {

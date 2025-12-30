@@ -2,8 +2,10 @@ package com.miguelrivera.praesidiumnote.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.miguelrivera.praesidiumnote.data.local.database.dao.NoteDao
 import com.miguelrivera.praesidiumnote.data.local.database.entity.NoteEntity
+import com.miguelrivera.praesidiumnote.data.local.database.util.Converters
 
 /**
  * The Room Database for this app.
@@ -14,6 +16,7 @@ import com.miguelrivera.praesidiumnote.data.local.database.entity.NoteEntity
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class NoteDatabase : RoomDatabase() {
     abstract val noteDao: NoteDao
     companion object {
