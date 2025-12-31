@@ -9,8 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.miguelrivera.praesidiumnote.presentation.navigation.NavActions
+import com.miguelrivera.praesidiumnote.presentation.navigation.PraesidiumNavHost
 import com.miguelrivera.praesidiumnote.presentation.ui.theme.PraesidiumNoteTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,15 +27,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PraesidiumNoteTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                val navController = rememberNavController()
+                val navActions = remember(navController) { NavActions(navController) }
+
+                CompositionLocalProvider(LocalNavActions provides navActions) {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        PraesidiumNavHost(
+                            navController = navController,
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }
     }
+}
+
+val LocalNavActions = staticCompositionLocalOf<NavActions> {
+    error("No NavActions provided! Check MainActivity implementation.")
 }
 
 @Composable
