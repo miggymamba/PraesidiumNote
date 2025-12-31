@@ -14,8 +14,6 @@ import androidx.navigation.toRoute
  * security gates and functional vault features. The architecture explicitly
  * separates 'Add' and 'Detail' routes to optimize resource allocation and
  * data hydration patterns.
- * * Note: Requires 'androidx.navigation:navigation-compose:2.8.0' or higher and
- * Kotlin Serialization plugin for the type-safe 'composable<T>' extension.
  *
  * @param navController The navigation controller used to manage the backstack.
  * @param modifier Applied to the NavHost container for layout consistency.

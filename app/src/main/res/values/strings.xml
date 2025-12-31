@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PraesidiumNote</string>
+    <string name="auth_prompt_title">Vault Access Required</string>
+    <string name="auth_prompt_subtitle">Verify identity to decrypt your records</string>
+    <string name="auth_error_unavailable">Authentication hardware is unavailable on this device.</string>
+    <string name="auth_error_unknown">An unexpected security error occurred. Please try again.</string>
 </resources>
