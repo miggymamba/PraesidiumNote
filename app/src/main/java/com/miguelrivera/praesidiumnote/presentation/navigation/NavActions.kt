@@ -30,6 +30,21 @@ class NavActions(private val navController: NavHostController) {
     }
 
     /**
+     * Securely redirects to the Auth gate, wiping the backstack to prevent
+     * unauthorized access via the back button.
+     */
+    fun navigateToLockScreen() {
+        if (navController.currentDestination?.route == Screen.Auth::class.qualifiedName) return
+
+        navController.navigate(Screen.Auth) {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
+
+    /**
      * Pops the current destination from the backstack.
      */
     fun navigateBack() {
