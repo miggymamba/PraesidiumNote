@@ -89,13 +89,6 @@ class BiometricAuthenticator @Inject constructor(
             .setTitle(context.getString(R.string.auth_prompt_title))
             .setSubtitle(context.getString(R.string.auth_prompt_subtitle))
             .setAllowedAuthenticators(authenticators)
-            .apply {
-                // Mandatory constraint: If DEVICE_CREDENTIAL is included on API 30+,
-                // setNegativeButtonText MUST NOT be called or the build() will throw.
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
-                    setNegativeButtonText(context.getString(android.R.string.cancel))
-                }
-            }
             .build()
 
         prompt.authenticate(promptInfo)

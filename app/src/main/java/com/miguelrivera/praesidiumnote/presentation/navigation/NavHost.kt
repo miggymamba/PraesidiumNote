@@ -6,6 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.miguelrivera.praesidiumnote.LocalNavActions
+import com.miguelrivera.praesidiumnote.presentation.auth.AuthGateScreen
 
 /**
  * Central navigation orchestrator for the application.
@@ -23,13 +25,16 @@ fun PraesidiumNavHost(
     navController: NavHostController,
     modifier: Modifier
 ) {
+
+    val navActions = LocalNavActions.current
+
     NavHost(
         navController = navController,
         startDestination = Screen.Auth,
         modifier = modifier
     ) {
         composable<Screen.Auth> {
-
+            AuthGateScreen(navActions = navActions)
         }
 
         composable<Screen.NoteList> {

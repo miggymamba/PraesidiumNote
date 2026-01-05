@@ -4,4 +4,6 @@
     <string name="auth_prompt_subtitle">Verify identity to decrypt your records</string>
     <string name="auth_error_unavailable">Authentication hardware is unavailable on this device.</string>
     <string name="auth_error_unknown">An unexpected security error occurred. Please try again.</string>
+    <string name="auth_required_message">Identity verification required to access your encrypted notes.</string>
+    <string name="auth_unlock_button">Unlock Vault</string>
 </resources>
