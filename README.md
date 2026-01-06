@@ -6,7 +6,7 @@
 
 | Vault Dashboard                                                                | Secure Editor | UX Feedback |
 |--------------------------------------------------------------------------------| ------------- | ----------- |
-| ![Now in Android](docs/images/vault_dashboard_empty_dark.png "Now in Android") | Tester | Tester | 
+| <img src="docs/images/vault_dashboard_empty_dark.png" width="250" alt="Vault Dashboard" />| Tester | Tester | 
 
 
 ## 🚀 Key Features
@@ -21,7 +21,7 @@
 
 ## 🏗️ Technical Architecture
 
-Following the [Now in Android](https://github.com/android/nowinandroid "null") philosophy, this project utilizes **Clean Architecture** with a layered approach to separate concerns and maximize testability.
+Following the [Now in Android](https://github.com/android/nowinandroid "Now In Android") philosophy, this project utilizes **Clean Architecture** with a layered approach to separate concerns and maximize testability.
 
 ### Layer Breakdown
 
