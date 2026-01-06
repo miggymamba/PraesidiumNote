@@ -6,9 +6,13 @@
 
 ### Dark Mode
 
-| Vault Gate | Vault Dashboard (Empty)  | Vault Dashboard (with Notes)  | Secure Editor | Vault Deletion |
-|------------| ------------------------ | ----------------------------- | ------------- | -------------- |
-| <img src="docs/images/vault_gate_dark.png" width="500" alt="Vault Dashboard" /> | <img src="docs/images/vault_dashboard_empty_dark.png" width="500" alt="Vault Dashboard" /> | <img src="docs/images/vault_dashboard_list_dark_one.png" width="500" alt="Vault List One" /> <img src="docs/images/vault_dashboard_list_dark_two.png" width="500" alt="Vault List Two" /> | <img src="docs/images/vault_editor_dark.png" width="500" alt="Vault Editor" /> <img src="docs/images/vault_editor_saved_dark.png" width="500" alt="Vault Editor Save" /> | <img src="docs/images/vault_dashboard_purge_dialog.png" width="500" alt="Vault Note Purge" /> <img src="docs/images/vault_dashboard_purge_dialog_done.png" width="500" alt="Vault Note Purge Done" /> |
+| Screen Name | Images |
+| -------- -- | ------ |
+| **Vault Gate** | <img src="docs/images/vault_gate_dark.png" width="500" alt="Vault Gate" /> |
+| **Vault Dashboard (Empty)** | <img src="docs/images/vault_dashboard_empty_dark.png" width="500" alt="Vault Dashboard" /> |
+| **Vault Dashboard (with Notes)** | <img src="docs/images/vault_dashboard_list_dark_one.png" width="500" alt="Vault List One" /> <img src="docs/images/vault_dashboard_list_dark_two.png" width="500" alt="Vault List Two" /> |
+| **Secure Editor** | <img src="docs/images/vault_editor_dark.png" width="500" alt="Vault Editor" /> <img src="docs/images/vault_editor_saved_dark.png" width="500" alt="Vault Editor Save" /> |
+| **Vault Deletion** | <img src="docs/images/vault_dashboard_purge_dialog.png" width="500" alt="Vault Note Purge" /> <img src="docs/images/vault_dashboard_purge_dialog_done.png" width="500" alt="Vault Note Purge Done" /> |
 
 ## 🚀 Key Features
 
