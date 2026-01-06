@@ -4,7 +4,10 @@
 
 ## 📸 Screenshots
 
-_(Placeholders: Add your app screenshots here to showcase the UI)_ | Note List | Encryption Settings | Bio-Auth | | :---: | :---: | :---: | | [Img] | [Img] | [Img] |
+| Vault Dashboard                                                                | Secure Editor | UX Feedback |
+|--------------------------------------------------------------------------------| ------------- | ----------- |
+| ![Now in Android](docs/images/vault_dashboard_empty_dark.png "Now in Android") | Tester | Tester | 
+
 
 ## 🚀 Key Features
 
