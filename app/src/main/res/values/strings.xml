@@ -16,4 +16,17 @@
     <string name="masked_content_pattern">•••• •••• •••• ••••</string>
     <string name="vault_empty_title">Your vault is empty</string>
     <string name="vault_empty_subtitle">Tap the button below to secure your first note.</string>
+    <string name="dialog_delete_title">Purge Note?</string>
+    <string name="dialog_delete_message">This will permanently remove the encrypted data from disk. This action cannot be undone.</string>
+    <string name="action_delete">Purge</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="note_purged_message">Note purged from vault.</string>
+
+
+    <!-- Note Editor -->
+    <string name="cd_back">Navigate back</string>
+    <string name="cd_save_note">Save note</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_content">Type something important you want to be secured...</string>
+    <string name="note_saved_message">Note Securely saved.</string>
 </resources>

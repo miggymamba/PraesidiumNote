@@ -2,12 +2,12 @@ package com.miguelrivera.praesidiumnote.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.miguelrivera.praesidiumnote.LocalNavActions
 import com.miguelrivera.praesidiumnote.presentation.auth.AuthGateScreen
+import com.miguelrivera.praesidiumnote.presentation.editor.NoteEditorScreen
 import com.miguelrivera.praesidiumnote.presentation.list.NoteListScreen
 
 /**
@@ -43,12 +43,11 @@ fun PraesidiumNavHost(
         }
 
         composable<Screen.AddNote> {
-            // Implementation: NoteEditorScreen with null state
+            NoteEditorScreen(navActions = navActions)
         }
 
-        composable<Screen.NoteDetail> { backStackEntry ->
-            val detail = backStackEntry.toRoute<Screen.NoteDetail>()
-            // Implementation: NoteEditorScreen with hydrated state (detail.noteId)
+        composable<Screen.NoteDetail> {
+            NoteEditorScreen(navActions = navActions)
         }
     }
 }

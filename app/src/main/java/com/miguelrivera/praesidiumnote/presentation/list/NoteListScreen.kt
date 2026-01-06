@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,12 +27,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,6 +52,7 @@ import com.miguelrivera.praesidiumnote.R
 import com.miguelrivera.praesidiumnote.domain.model.Note
 import com.miguelrivera.praesidiumnote.presentation.navigation.NavActions
 import com.miguelrivera.praesidiumnote.presentation.ui.theme.PraesidiumNoteTheme
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -76,6 +82,33 @@ fun NoteListScreen(
         }
     }
 
+    NoteListContent(
+        uiState = uiState,
+        snackbarHostState = snackbarHostState,
+        onAddNote = navActions::navigateToAddNote,
+        onNoteClick = { id -> navActions.navigateToNoteDetail(id)},
+        onDeleteClick = viewModel::deleteNote
+    )
+}
+
+
+/**
+ * Stateless UI implementation.
+ * Separated to allow for Previews and Screenshot testing without Hilt dependencies.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NoteListContent(
+    uiState: NoteListUiState,
+    snackbarHostState: SnackbarHostState,
+    onAddNote: () -> Unit,
+    onNoteClick: (String) -> Unit,
+    onDeleteClick: (Note) -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    var notePendingDeletion by remember { mutableStateOf<Note?>(null) }
+    val notePurgedMessage = stringResource(R.string.note_purged_message)
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -87,7 +120,7 @@ fun NoteListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = navActions::navigateToAddNote,
+                onClick = onAddNote,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(
@@ -97,9 +130,11 @@ fun NoteListScreen(
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
-    ) { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding)){
-            when (val state = uiState){
+    ) { paddingValues ->
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)){
+            when (uiState){
                 is NoteListUiState.Loading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
@@ -108,19 +143,65 @@ fun NoteListScreen(
                 }
                 is NoteListUiState.Success -> {
                     NoteLazyList(
-                        notes = state.notes,
-                        onNoteClick = { navActions.navigateToNoteDetail(it.id)},
-                        onDeleteClick = viewModel::deleteNote
+                        notes = uiState.notes,
+                        onNoteClick = { note -> onNoteClick(note.id) },
+                        onDeleteClick = { notePendingDeletion = it }
                     )
                 }
                 is NoteListUiState.Error -> {
-                    ErrorVaultView(message = state.message)
+                    ErrorVaultView(message = uiState.message)
                 }
             }
         }
     }
+
+    DeleteConfirmationDialog(
+        note = notePendingDeletion,
+        onDismiss = { notePendingDeletion = null },
+        onConfirm = { note ->
+            onDeleteClick(note)
+            notePendingDeletion = null
+            scope.launch {
+                snackbarHostState.showSnackbar(notePurgedMessage)
+            }
+        }
+    )
 }
 
+/**
+ * High-assurance destructive action confirmation.
+ * Extracted to isolate dialog logic and maintain clean composition trees.
+ */
+@Composable
+private fun DeleteConfirmationDialog(
+    note: Note?,
+    onDismiss: () -> Unit,
+    onConfirm: (Note) -> Unit
+) {
+    note?.let {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = { Text(stringResource(R.string.dialog_delete_title)) },
+            text = { Text(stringResource(R.string.dialog_delete_message)) },
+            confirmButton = {
+                TextButton(
+                    onClick = { onConfirm(note) }
+                ) {
+                    Text(
+                        text = stringResource(R.string.action_delete),
+                        color = MaterialTheme.colorScheme.error,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        )
+    }
+}
 
 /**
  * Renders the scrollable list of encrypted note summaries.
@@ -215,7 +296,9 @@ private fun NoteCard(
 @Composable
 private fun EmptyVaultPlaceholder() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(ListDimens.PaddingLarge),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(ListDimens.PaddingLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -248,7 +331,9 @@ private fun EmptyVaultPlaceholder() {
 @Composable
 private fun ErrorVaultView(message: String) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(ListDimens.PaddingLarge),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(ListDimens.PaddingLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

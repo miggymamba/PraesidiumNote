@@ -59,10 +59,10 @@ class MainActivity : FragmentActivity() {
                 }
 
                 CompositionLocalProvider(LocalNavActions provides navActions) {
-                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
                         PraesidiumNavHost(
                             navController = navController,
-                            modifier = Modifier.padding(innerPadding)
+                            modifier = Modifier.padding(paddingValues)
                         )
                     }
                 }

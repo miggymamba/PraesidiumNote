@@ -88,11 +88,11 @@ private fun AuthGateContent(
     uiState: AuthState,
     onAuthenticate: () -> Unit
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
+    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
             Column(
