@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.miguelrivera.praesidiumnote.LocalNavActions
 import com.miguelrivera.praesidiumnote.presentation.auth.AuthGateScreen
+import com.miguelrivera.praesidiumnote.presentation.list.NoteListScreen
 
 /**
  * Central navigation orchestrator for the application.
@@ -38,7 +39,7 @@ fun PraesidiumNavHost(
         }
 
         composable<Screen.NoteList> {
-            // Implementation: NoteListScreen
+            NoteListScreen(navActions = navActions)
         }
 
         composable<Screen.AddNote> {

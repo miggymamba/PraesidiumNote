@@ -19,3 +19,5 @@ val CharcoalGrey = Color(0xFF333333)
 val AlertRed = Color(0xFFD63030)
 
 val SlateGrey = Color(0xFF778899)
+
+val Obsidian = Color(0xFF1E1E1E)
