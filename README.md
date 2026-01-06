@@ -7,7 +7,7 @@
 ### Dark Mode
 
 | Screen Name | Images |
-| -------- -- | ------ |
+| ---------- | ------ |
 | **Vault Gate** | <img src="docs/images/vault_gate_dark.png" width="500" alt="Vault Gate" /> |
 | **Vault Dashboard (Empty)** | <img src="docs/images/vault_dashboard_empty_dark.png" width="500" alt="Vault Dashboard" /> |
 | **Vault Dashboard (with Notes)** | <img src="docs/images/vault_dashboard_list_dark_one.png" width="500" alt="Vault List One" /> <img src="docs/images/vault_dashboard_list_dark_two.png" width="500" alt="Vault List Two" /> |
