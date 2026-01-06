@@ -4,9 +4,11 @@
 
 ## 📸 Screenshots
 
-| Vault Dashboard                                                                | Secure Editor | UX Feedback |
-|--------------------------------------------------------------------------------| ------------- | ----------- |
-| <img src="docs/images/vault_dashboard_empty_dark.png" width="250" alt="Vault Dashboard" />| Tester | Tester | 
+### Dark Mode
+
+| Vault Dashboard (Empty)  | Vault Dashboard (with Notes)  | Secure Editor | Vault Deletion |
+|--------------------------|-------------------------------| -------------- | ---- |
+| <img src="docs/images/vault_dashboard_empty_dark.png" width="250" alt="Vault Dashboard" /> | <img src="docs/images/vault_dashboard_list_dark_one.png" width="250" alt="Vault Dashboard" /> <img src="docs/images/vault_dashboard_list_dark_two.png" width="250" alt="Vault Dashboard" /> | <img src="docs/images/vault_editor_dark.png" width="250" alt="Vault Dashboard" /> <img src="docs/images/vault_editor_saved_dark.png" width="250" alt="Vault Dashboard" /> | <img src="docs/images/vault_dashboard_purge_dialog.png" width="250" alt="Vault Dashboard" /> <img src="docs/images/vault_dashboard_purge_dialog_done.png" width="250" alt="Vault Dashboard" /> |
 
 
 ## 🚀 Key Features
