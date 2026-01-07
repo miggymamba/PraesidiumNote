@@ -20,25 +20,21 @@ import javax.inject.Inject
 /**
  * Manages the state for Note Creation and Editing.
  *
- * ### Security Note: String vs CharArray
- * While the Domain layer strictly uses [CharArray] for Zero-Knowledge hygiene,
- * the UI layer (Compose TextField) requires [String]. This ViewModel acts as the
- * security airlock, converting UI Strings to CharArrays only at the moment of persistence.
+ * ### Security Note: Zero-Knowledge Hygiene
+ * Since the UI layer requires [String], which are immutable and potentially persistent
+ * in the heap, the references should be explicitly nullified and wipe temporary [CharArray]
+ * buffers during [onCleared] to minimize the memory footprint of sensitive data.
  */
 @HiltViewModel
 class NoteEditorViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getSingleNoteUseCase: GetSingleNoteUseCase,
-    private val saveNotesUseCase: SaveNoteUseCase
+    private val saveNoteUseCase: SaveNoteUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NoteEditorUiState())
     val uiState: StateFlow<NoteEditorUiState> = _uiState.asStateFlow()
 
-    /**
-     * Probes the [SavedStateHandle] for [Screen.NoteDetail] arguments.
-     * Returns null if we are in [Screen.AddNote] mode, allowing for unified logic.
-     */
     private val noteId: String? = try {
         savedStateHandle.toRoute<Screen.NoteDetail>().noteId
     } catch (e: Exception) {
@@ -65,13 +61,9 @@ class NoteEditorViewModel @Inject constructor(
                         // Immediate wipe of the domain model buffer after UI consumption
                         note.clear()
                     }
-
                     is NoteResult.Error -> {
                         _uiState.update {
-                            it.copy(
-                                error = "Failed to load note.",
-                                isLoading = false
-                            )
+                            it.copy(error = "Failed to load note.", isLoading = false)
                         }
                     }
                 }
@@ -79,73 +71,66 @@ class NoteEditorViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Intent: Update the title buffer from UI input.
-     */
     fun onTitleChange(newTitle: String) {
         _uiState.update { it.copy(title = newTitle) }
     }
 
-    /**
-     * Intent: Update the content buffer from UI input.
-     */
     fun onContentChange(newContent: String) {
         _uiState.update { it.copy(content = newContent) }
     }
 
-    /**
-     * Intent: Persist the current state to the encrypted database.
-     * Converts the UI Strings into CharArrays and delegates to the UseCase.
-     */
     fun saveNote() {
         val currentState = _uiState.value
         if (currentState.title.isBlank() && currentState.content.isBlank()) return
 
         viewModelScope.launch {
-            val noteToSave = if (noteId != null) {
-                Note(
-                    id = noteId,
-                    title = currentState.title.toCharArray(),
-                    content = currentState.content.toCharArray()
-                )
-            } else {
-                Note(
-                    title = currentState.title.toCharArray(),
-                    content = currentState.content.toCharArray()
-                )
-            }
+            // Explicit try-finally to ensure that even if
+            // the save fails, it won't leak the temporary CharArrays.
+            val titleArray = currentState.title.toCharArray()
+            val contentArray = currentState.content.toCharArray()
 
-            val result = saveNotesUseCase(noteToSave)
-
-            when (result) {
-                is NoteResult.Success -> {
-                    _uiState.update { it.copy(isSaved = true) }
+            try {
+                val noteToSave = if (noteId != null) {
+                    Note(id = noteId, title = titleArray, content = contentArray)
+                } else {
+                    Note(title = titleArray, content = contentArray)
                 }
 
-                is NoteResult.Error -> {
+                val result = saveNoteUseCase(noteToSave)
+                if (result is NoteResult.Success) {
+                    _uiState.update { it.copy(isSaved = true) }
+                } else {
                     _uiState.update { it.copy(error = "Failed to save Note.") }
                 }
+            } finally {
+                //  Manual wipe of the local stack arrays
+                titleArray.fill('\u0000')
+                contentArray.fill('\u0000')
             }
         }
     }
 
-    /**
-     * Consumes one-time transient events or error states.
-     * * Resets the error field in [NoteEditorUiState] to null, preventing redundant
-     * triggers (like Snackbars) during UI recomposition or configuration changes.
-     */
     fun clearError() {
         _uiState.update { it.copy(error = null) }
     }
+
+    /**
+     * Executed when the user navigates away and the ViewModel is destroyed.
+     * Overwrite the uiState with empty values to encourage the GC to reclaim
+     * the sensitive string references.
+     */
+    override fun onCleared() {
+        super.onCleared()
+        _uiState.update {
+            it.copy(
+                title = "",
+                content = "",
+                error = null
+            )
+        }
+    }
 }
 
-/**
- * MVI State for the Editor.
- *
- * @property title The transient text for the Title field.
- * @property content The transient text for the Content field.
- * @property isSaved One-time signal to trigger navigation back.
- */
 data class NoteEditorUiState(
     val title: String = "",
     val content: String = "",

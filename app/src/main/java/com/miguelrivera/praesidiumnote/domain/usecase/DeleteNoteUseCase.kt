@@ -28,7 +28,7 @@ class DeleteNoteUseCase @Inject constructor(
             /*
              * Zero-Knowledge Hygiene:
              * Once the repository (Room/SQLCipher) deletes the data,
-             * we wipe the domain model's heap footprint immediately.
+             * wipe the domain model's heap footprint immediately.
              */
             note.clear()
 

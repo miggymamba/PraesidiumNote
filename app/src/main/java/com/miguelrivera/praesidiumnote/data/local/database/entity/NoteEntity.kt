@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 /**
  * Persistence model for the encrypted local database.
  * * ### Security Design: SQLCipher Integration
- * This entity is stored in a database encrypted via AES-256 GCM. We use [CharArray]
+ * This entity is stored in a database encrypted via AES-256 GCM. It uses [CharArray]
  * instead of [String] to support manual memory zeroing, ensuring that sensitive
  * data doesn't persist in the Java Heap indefinitely.
  *

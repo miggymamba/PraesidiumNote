@@ -7,7 +7,7 @@ import androidx.room.TypeConverter
  *
  * ### Architectural Decision: Intermediary Mapping
  * While the [NoteEntity] uses [CharArray] for memory security (heap hygiene),
- * Room requires a primitive mapping for SQLite. We map to [String] during
+ * Room requires a primitive mapping for SQLite. It should be mapped to [String] during
  * the persistence phase.
  * * Note: While [String] creation is temporary, SQLCipher encrypts this data
  * before it is written to disk, ensuring the 'Zero-Knowledge' contract.

@@ -29,7 +29,7 @@ class SaveNoteUseCase @Inject constructor(
             /*
              * Zero-Knowledge Hygiene:
              * Once the repository (Room/SQLCipher) consumes the data,
-             * we wipe the domain model's heap footprint immediately.
+             * wipe the domain model's heap footprint immediately.
              */
             note.clear()
 

@@ -21,7 +21,7 @@ import javax.inject.Singleton
 
 /**
  * Qualifier for identifying the IO Dispatcher within the DI graph.
- * This prevents ambiguity if we add different dispatchers later.
+ * This prevents ambiguity if there are different dispatchers added later.
  */
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
@@ -53,7 +53,7 @@ abstract class DatabaseModule {
         @Provides
         @Singleton
         fun provideDatabase(@ApplicationContext context: Context, passphraseManager: PassphraseManager): NoteDatabase {
-            val passphrase = passphraseManager.getPassphrase()
+            val passphrase = passphraseManager.getPassphraseSync()
             val factory = SupportOpenHelperFactory(passphrase)
 
             return Room.databaseBuilder(

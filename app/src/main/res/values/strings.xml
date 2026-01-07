@@ -8,6 +8,7 @@
     <string name="auth_error_unknown">An unexpected security error occurred. Please try again.</string>
     <string name="auth_required_message">Identity verification required to access your encrypted notes.</string>
     <string name="auth_unlock_button">Unlock Vault</string>
+    <string name="auth_loading">Decrypting your vault...</string>
 
     <!-- Note List -->
     <string name="cd_add_note">Create new encrypted note</string>

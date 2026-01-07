@@ -23,10 +23,10 @@ class GetSingleNoteUseCase @Inject constructor(
     operator fun invoke(id: String): Flow<NoteResult<Note>> {
         return repository.getNote(id)
             .map { note ->
-                if (note == null) {
-                    NoteResult.Error.NotFound(id = id)
-                } else {
+                if (note != null) {
                     NoteResult.Success(note)
+                } else {
+                    NoteResult.Error.NotFound(id = id)
                 }
             }
     }

@@ -108,7 +108,8 @@ private fun AuthGateContent(
 
                 AuthHeader(
                     painter = iconPainter,
-                    isError = uiState is AuthState.Error
+                    isError = uiState is AuthState.Error,
+                    isLoading = uiState is AuthState.Loading
                 )
 
                 Spacer(modifier = Modifier.height(AuthDimens.SpacingLarge))
@@ -137,14 +138,19 @@ private fun AuthGateContent(
 @Composable
 private fun AuthHeader(
     painter: Painter,
-    isError: Boolean
+    isError: Boolean,
+    isLoading: Boolean
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
             painter = painter,
             contentDescription = null,
             modifier = Modifier.size(AuthDimens.IconSize),
-            tint = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+            tint = when {
+                isError -> MaterialTheme.colorScheme.error
+                isLoading -> MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                else -> MaterialTheme.colorScheme.primary
+            }
         )
         Spacer(modifier = Modifier.height(AuthDimens.SpacingMedium))
         Text(
@@ -153,7 +159,11 @@ private fun AuthHeader(
         )
         Spacer(modifier = Modifier.height(AuthDimens.SpacingSmall))
         Text(
-            text = stringResource(R.string.auth_required_message),
+            text = if (isLoading) {
+                stringResource(R.string.auth_loading)
+            } else {
+                stringResource(R.string.auth_required_message)
+            },
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -217,6 +227,19 @@ private fun AuthGateScreenErrorPreview() {
         Surface {
             AuthGateContent(
                 uiState = AuthState.Error("Fingerprint not recognized. Please try again."),
+                onAuthenticate = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Loading State")
+@Composable
+private fun AuthGateScreenLoadingPreview() {
+    PraesidiumNoteTheme {
+        Surface {
+            AuthGateContent(
+                uiState = AuthState.Loading,
                 onAuthenticate = {}
             )
         }

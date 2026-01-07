@@ -30,7 +30,7 @@ class NoteListViewModel @Inject constructor(
     /**
      * The single source of truth for the UI.
      *
-     * We use [stateIn] with [SharingStarted.WhileSubscribed] to ensure the database
+     * This uses [stateIn] with [SharingStarted.WhileSubscribed] to ensure the database
      * flow is active only when the UI is visible, preventing resource waste
      * when the app is backgrounded or the user is in the Editor.
      */

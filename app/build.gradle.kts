@@ -91,6 +91,9 @@ android {
         /* Testing */
         testImplementation(libs.mockk)
         testImplementation(libs.junit)
+        testImplementation(libs.coroutines.test)
+        testImplementation(libs.google.truth)
+        testImplementation(libs.androidx.navigation.testing)
         androidTestImplementation(libs.androidx.junit)
         androidTestImplementation(libs.androidx.espresso.core)
         androidTestImplementation(platform(libs.androidx.compose.bom))

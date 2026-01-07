@@ -5,10 +5,10 @@ import com.miguelrivera.praesidiumnote.domain.model.Note
 
 /**
  * Extension functions to convert between NoteEntity (Data) and Note (Domain).
- * * We use .copyOf() for the CharArrays to make sure each layer has its own
- * version of the data. This is important so that when we clear the data
+ * * The function.copyOf() should be used for the CharArrays to make sure each layer has its own
+ * version of the data. This is important so that when the data is cleared
  * in the domain layer, it doesn't accidentally wipe the data being saved
- * to the database. We avoid using regular Strings here to prevent
+ * to the database. Always avoid using regular Strings here to prevent
  * sensitive information from getting stuck in the memory.
  */
 fun NoteEntity.toNote(): Note {

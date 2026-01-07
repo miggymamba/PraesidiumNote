@@ -6,7 +6,7 @@ import java.util.UUID
  * Core domain representation of a user note.
  *
  * ### Security Design: Zero-Knowledge Hygiene
- * By utilizing [CharArray], we circumvent the immutability of JVM Strings.
+ * By utilizing [CharArray], the app circumvents the immutability of JVM Strings.
  * This allows the app to overwrite sensitive content in memory as soon as
  * the persistence or display operation is complete.
  *
