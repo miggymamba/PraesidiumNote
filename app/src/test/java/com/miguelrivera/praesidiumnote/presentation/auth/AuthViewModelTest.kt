@@ -55,6 +55,27 @@ class AuthViewModelTest {
     }
 
     @Test
+    fun `onAuthResult UserCanceled returns state to Idle`() = runTest {
+        // When: User cancels the biometric prompt
+        viewModel.onAuthResult(AuthResult.UserCanceled)
+
+        // Then: State should remain Idle (or return to it) so they can try again
+        assertThat(viewModel.uiState.value).isEqualTo(AuthState.Idle)
+    }
+
+    @Test
+    fun `onAuthResult LockedOut transitions to Error with specific message`() = runTest {
+        // When: Multiple failed attempts trigger a lockout
+        viewModel.onAuthResult(AuthResult.LockedOut(isPermanent = false))
+
+        // Then
+        assertThat(viewModel.uiState.value).isInstanceOf(AuthState.Error::class.java)
+        val state = viewModel.uiState.value as AuthState.Error
+        // Verify we handle the lockout state logic (checking if message contains 'lockout')
+        assertThat(state.message.lowercase()).contains("too many attempts")
+    }
+
+    @Test
     fun `onAuthResult Error transitions to Error state`() = runTest {
         // When
         viewModel.onAuthResult(AuthResult.Error("Fingerprint rejected"))

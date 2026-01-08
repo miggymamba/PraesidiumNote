@@ -53,6 +53,15 @@ android {
         }
     }
 
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            all {
+                it.jvmArgs("-XX:+EnableDynamicAgentLoading", "-Xmx2g", "-noverify")
+            }
+        }
+    }
+
     dependencies {
         implementation(libs.androidx.core.ktx)
         implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -94,6 +103,8 @@ android {
         testImplementation(libs.coroutines.test)
         testImplementation(libs.google.truth)
         testImplementation(libs.androidx.navigation.testing)
+        testImplementation(libs.robolectric)
+        testImplementation(libs.androidx.test.core)
         androidTestImplementation(libs.androidx.junit)
         androidTestImplementation(libs.androidx.espresso.core)
         androidTestImplementation(platform(libs.androidx.compose.bom))

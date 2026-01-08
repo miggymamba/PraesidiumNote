@@ -1,6 +1,6 @@
 package com.miguelrivera.praesidiumnote.presentation.list
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import com.miguelrivera.praesidiumnote.domain.model.Note
 import com.miguelrivera.praesidiumnote.domain.usecase.DeleteNoteUseCase
 import com.miguelrivera.praesidiumnote.domain.usecase.GetNotesUseCase
@@ -56,9 +56,9 @@ class NoteListViewModelTest {
         advanceUntilIdle()
 
         // Then
-        Truth.assertThat(viewModel.uiState.value).isInstanceOf(NoteListUiState.Success::class.java)
+        assertThat(viewModel.uiState.value).isInstanceOf(NoteListUiState.Success::class.java)
         val successState = viewModel.uiState.value as NoteListUiState.Success
-        Truth.assertThat(successState.notes).isEqualTo(mockNotes)
+        assertThat(successState.notes).isEqualTo(mockNotes)
     }
 
     @Test
@@ -72,7 +72,7 @@ class NoteListViewModelTest {
         advanceUntilIdle()
 
         // Then
-        Truth.assertThat(viewModel.uiState.value).isEqualTo(NoteListUiState.Empty)
+        assertThat(viewModel.uiState.value).isEqualTo(NoteListUiState.Empty)
     }
 
     @Test
@@ -91,5 +91,19 @@ class NoteListViewModelTest {
 
         // Then
         coVerify(exactly = 1) { deleteNoteUseCase(note) }
+    }
+
+    @Test
+    fun `uiState transitions to Error when generic NoteResult Error occurs`() = runTest {
+        // NoteResult.Error.NotFound is a subclass of NoteResult.Error
+        every { getNotesUseCase() } returns flowOf(NoteResult.Error.NotFound("123"))
+
+        viewModel = NoteListViewModel(getNotesUseCase, deleteNoteUseCase)
+        backgroundScope.launch { viewModel.uiState.collect() }
+        advanceUntilIdle()
+
+        assertThat(viewModel.uiState.value).isInstanceOf(NoteListUiState.Error::class.java)
+        val errorState = viewModel.uiState.value as NoteListUiState.Error
+        assertThat(errorState.message).isEqualTo("Failed to load vault.")
     }
 }

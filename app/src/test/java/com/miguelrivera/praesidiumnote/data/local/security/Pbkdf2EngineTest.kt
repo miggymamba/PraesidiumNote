@@ -17,7 +17,7 @@ class Pbkdf2EngineTest {
 
     @Test
     fun `derive produces consistent output for same input`() {
-        val password = "staff-level-password".toCharArray()
+        val password = "confidential-level-password".toCharArray()
         val salt = "constant-salt".toByteArray()
 
         // Use copyOf to ensure its not accidentally relying on shared state
