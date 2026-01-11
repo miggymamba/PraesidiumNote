@@ -1,4 +1,4 @@
-# 🛡️ Praesidium Note
+#  Praesidium Note
 
 **Praesidium Note** is an Android application built to explore how a privacy-first, zero-knowledge note system can be designed and maintained under real-world platform constraints.
 
@@ -33,7 +33,7 @@ Following the [Now in Android](https://github.com/android/nowinandroid "Now In A
 
 - **SQLCipher:** AES-256 GCM encryption at the SQLite level.
 
-- **Conscrypt/KeyStore:** Utilizing the best available security provider for key generation.
+- **KeyStore:** Utilizing the best available security provider for key generation.
 
 - **Heap Hygiene:** Manual zeroing of `CharArray` to prevent sensitive data from lingering in the String Pool.
 
@@ -204,4 +204,4 @@ sequenceDiagram
 
 ## License
 
-Praesidium Note is compliant with Apache License 2.0. See [LICENSE](https://github.com/miggymamba/PraesidiumNote/blob/main/LICENSE) for more information.
+Praesidium Note is compliant with **Apache License 2.0**. See [LICENSE](https://github.com/miggymamba/PraesidiumNote/blob/main/LICENSE) for more information.

@@ -4,7 +4,7 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class PraesidiumApp: Application() {
+class PraesidiumNoteApp: Application() {
     override fun onCreate() {
         super.onCreate()
         System.loadLibrary("sqlcipher")
