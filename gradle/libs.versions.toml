@@ -1,60 +1,59 @@
 [versions]
-# App Versioning
+# App Versioning & SDKs
 minSdk = "24"
 targetSdk = "36"
 compileSdk = "36"
 appVersionCode = "1"
 appVersionName = "1.0.0"
 
-# Core Kotlin and Android
+# Project & Tools
 agp = "8.13.2"
 kotlin = "2.3.0"
-coreKtx = "1.17.0"
-lifecycleRuntimeKtx = "2.10.0"
-kspVersion = "2.3.4"
-splashscreen = "1.2.0"
-kotlinSerialization = "2.3.0"
-kotlinSerializationJson = "1.10.0"
+ksp = "2.3.4"
 
-# Hilt (Dependency Injection)
-hiltVersion = "2.57.2"
-hiltCompilerVersion = "1.3.0"
-hiltNavigationComposeVersion = "1.3.0"
+# Core AndroidX
+coreKtx = "1.17.0"
+lifecycle = "2.10.0"
+splashscreen = "1.2.0"
 
 # Jetpack Compose
 activityCompose = "1.12.2"
 composeBom = "2026.01.00"
+navigationCompose = "2.9.6"
+hiltNavigationCompose = "1.3.0"
+
+# Dependency Injection (Hilt)
+hilt = "2.57.2"
+hiltCompiler = "1.3.0"
+
+# Database (Room)
+room = "2.8.4"
+
+# Concurrency & Serialization
+coroutines = "1.10.2"
+kotlinSerialization = "2.3.0"
+kotlinSerializationJson = "1.10.0"
+
+# Security (Zero-Knowledge Stack)
+sqlCipher = "4.13.0"
+biometric = "1.4.0-alpha02"
 
 # Testing
 junit = "4.13.2"
 junitVersion = "1.3.0"
-espressoCore = "3.7.0"
-mockkVersion = "1.14.9"
+espresso = "3.7.0"
+mockk = "1.14.9"
 truth = "1.4.5"
-robolectricVersion = "4.16.1"
-testCoreVersion = "1.7.0"
-
-# Room (Database / Data Persistence)
-roomVersion = "2.8.4"
-
-# Navigation for Compose
-navigationCompose = "2.9.6"
-
-# Security
-sqlCipher = "4.13.0"
-biometric = "1.4.0-alpha02"
-
-# Concurrency
-coroutines = "1.10.2"
-
+robolectric = "4.16.1"
+testCore = "1.7.0"
 
 [libraries]
-# Core
+# Core AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen"}
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJson"}
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJson" }
 
 # Jetpack Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -62,47 +61,45 @@ androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
-# Hilt
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion"}
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltVersion"}
-hilt-android-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompilerVersion"}
-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose",  version.ref = "hiltNavigationComposeVersion" }
+# Dependency Injection (Hilt)
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-android-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltCompiler" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
-# Room
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
+# Database (Room)
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
-# Navigation
-androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-
-# Coroutines
+# Concurrency
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # Security
 androidx-biometric = { group = "androidx.biometric", name = "biometric-ktx", version.ref = "biometric" }
 sqlcipher-android = { group = "net.zetetic", name = "sqlcipher-android", version.ref = "sqlCipher" }
 
 # Testing
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-test-core = { group = "androidx.test", name = "core-ktx", version.ref = "testCoreVersion" }
-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockkVersion" }
-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines"}
-google-truth = { group = "com.google.truth", name = "truth", version.ref = "truth"}
-androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationCompose"}
-robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectricVersion"}
+test-junit = { group = "junit", name = "junit", version.ref = "junit" }
+test-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+test-androidx-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+test-androidx-core = { group = "androidx.test", name = "core-ktx", version.ref = "testCore" }
+test-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+test-truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+test-navigation = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationCompose" }
+test-robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+debug-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+debug-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion"}
-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion"}
-room = { id = "androidx.room", version.ref = "roomVersion" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }

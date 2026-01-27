@@ -74,7 +74,7 @@ android {
         implementation(libs.androidx.compose.material3)
         implementation(libs.androidx.core.splashscreen)
         debugImplementation(libs.androidx.compose.ui.tooling)
-        debugImplementation(libs.androidx.compose.ui.test.manifest)
+        debugImplementation(libs.debug.compose.ui.test.manifest)
 
         /* Hilt Dependencies */
         implementation(libs.hilt.android)
@@ -88,7 +88,7 @@ android {
         ksp(libs.room.compiler)
 
         /* Navigation */
-        implementation(libs.androidx.navigation)
+        implementation(libs.androidx.navigation.compose)
 
         /* Coroutines */
         implementation(libs.coroutines.android)
@@ -98,16 +98,16 @@ android {
         implementation(libs.sqlcipher.android)
 
         /* Testing */
-        testImplementation(libs.mockk)
-        testImplementation(libs.junit)
+        testImplementation(libs.test.mockk)
+        testImplementation(libs.test.junit)
         testImplementation(libs.coroutines.test)
-        testImplementation(libs.google.truth)
-        testImplementation(libs.androidx.navigation.testing)
-        testImplementation(libs.robolectric)
-        testImplementation(libs.androidx.test.core)
-        androidTestImplementation(libs.androidx.junit)
-        androidTestImplementation(libs.androidx.espresso.core)
+        testImplementation(libs.test.truth)
+        testImplementation(libs.test.navigation)
+        testImplementation(libs.test.robolectric)
+        testImplementation(libs.test.androidx.core)
+        androidTestImplementation(libs.test.androidx.junit)
+        androidTestImplementation(libs.test.androidx.espresso)
         androidTestImplementation(platform(libs.androidx.compose.bom))
-        androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+        androidTestImplementation(libs.debug.compose.ui.test.junit4)
     }
 }
