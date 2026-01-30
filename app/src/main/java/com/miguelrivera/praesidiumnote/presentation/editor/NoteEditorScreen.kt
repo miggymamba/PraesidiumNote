@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +48,6 @@ import kotlinx.coroutines.launch
  * Screen for creating and modifying secure notes.
  * Uses BasicTextField for granular control over styling to remove default underlines.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteEditorScreen(
     navActions: NavActions,
@@ -101,7 +99,6 @@ fun NoteEditorScreen(
  * Stateless UI implementation.
  * Separated to allow for Previews and Screenshot testing without Hilt dependencies.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteEditorContent(
     uiState: NoteEditorUiState,

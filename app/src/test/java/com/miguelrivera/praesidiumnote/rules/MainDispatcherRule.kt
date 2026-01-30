@@ -1,7 +1,6 @@
 package com.miguelrivera.praesidiumnote.rules
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -13,7 +12,6 @@ import org.junit.runner.Description
  * Reusable JUnit 4 Rule to override the Main dispatcher during unit tests.
  * Essential for testing ViewModels or any code touching Dispatchers.Main.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule (
     val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
 ) : TestWatcher() {

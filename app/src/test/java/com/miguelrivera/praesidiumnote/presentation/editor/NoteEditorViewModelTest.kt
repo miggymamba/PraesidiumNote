@@ -14,7 +14,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -33,7 +32,6 @@ import org.junit.Test
  * Uses [com.miguelrivera.praesidiumnote.rules.MainDispatcherRule] and [backgroundScope] to ensure all coroutine state
  * transitions are captured during testing.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class NoteEditorViewModelTest {
 
     @get:Rule

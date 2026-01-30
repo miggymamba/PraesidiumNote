@@ -10,7 +10,6 @@ import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -27,7 +26,6 @@ import org.junit.Test
  * in the [backgroundScope]. This triggers the upstream flow and ensures the test
  * move past the 'Loading' initial state without manually mixing dispatchers.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class NoteListViewModelTest {
 
     @get:Rule

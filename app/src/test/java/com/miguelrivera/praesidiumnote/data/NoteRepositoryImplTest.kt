@@ -9,14 +9,12 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class NoteRepositoryImplTest {
 
     private val noteDao: NoteDao = mockk(relaxed = true)

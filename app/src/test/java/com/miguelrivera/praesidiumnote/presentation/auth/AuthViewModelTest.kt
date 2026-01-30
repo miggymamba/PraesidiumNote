@@ -6,7 +6,6 @@ import com.miguelrivera.praesidiumnote.rules.MainDispatcherRule
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -19,7 +18,6 @@ import org.junit.Test
  * crashes during viewModelScope execution. Verifies that the UI transitions
  * through the 'Loading' state during expensive cryptographic warmup.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 class AuthViewModelTest {
 
     @get:Rule
