@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.miguelrivera.praesidiumnote.LocalNavActions
+import com.miguelrivera.praesidiumnote.presentation.LocalNavActions
 import com.miguelrivera.praesidiumnote.presentation.auth.AuthGateScreen
 import com.miguelrivera.praesidiumnote.presentation.editor.NoteEditorScreen
 import com.miguelrivera.praesidiumnote.presentation.list.NoteListScreen

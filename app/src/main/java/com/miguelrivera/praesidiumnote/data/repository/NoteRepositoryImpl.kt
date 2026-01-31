@@ -1,9 +1,10 @@
 package com.miguelrivera.praesidiumnote.data.repository
 
-import com.miguelrivera.praesidiumnote.data.di.IoDispatcher
 import com.miguelrivera.praesidiumnote.data.local.database.dao.NoteDao
 import com.miguelrivera.praesidiumnote.data.mapper.toNote
 import com.miguelrivera.praesidiumnote.data.mapper.toNoteEntity
+import com.miguelrivera.praesidiumnote.di.Dispatcher
+import com.miguelrivera.praesidiumnote.di.PraesidiumDispatchers
 import com.miguelrivera.praesidiumnote.domain.model.Note
 import com.miguelrivera.praesidiumnote.domain.repository.NoteRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,7 +21,7 @@ import javax.inject.Inject
  */
 class NoteRepositoryImpl @Inject constructor(
     private val noteDao: NoteDao,
-    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:Dispatcher(PraesidiumDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : NoteRepository {
 
     override fun getNotes(): Flow<List<Note>> {

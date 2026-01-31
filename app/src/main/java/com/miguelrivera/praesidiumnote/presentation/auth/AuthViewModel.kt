@@ -2,8 +2,9 @@ package com.miguelrivera.praesidiumnote.presentation.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miguelrivera.praesidiumnote.data.di.DefaultDispatcher
 import com.miguelrivera.praesidiumnote.data.local.security.PassphraseManager
+import com.miguelrivera.praesidiumnote.di.Dispatcher
+import com.miguelrivera.praesidiumnote.di.PraesidiumDispatchers
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val passphraseManager: PassphraseManager,
-    @param:DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
+    @param:Dispatcher(PraesidiumDispatchers.Default) private val defaultDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AuthState>(AuthState.Idle)

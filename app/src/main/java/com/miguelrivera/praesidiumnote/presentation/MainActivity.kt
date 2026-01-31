@@ -1,4 +1,4 @@
-package com.miguelrivera.praesidiumnote
+package com.miguelrivera.praesidiumnote.presentation
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
