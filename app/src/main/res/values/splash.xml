@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Using the Core Splash Screen API requires a dedicated theme that inherits
+      from Theme.SplashScreen. This ensures backward compatibility with Android 12+.
+    -->
+    <style name="Theme.PraesidiumNote.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background color -->
+        <item name="windowSplashScreenBackground">#FFFFFF</item>
+        <!-- Use the same icon as the launcher for now -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <!-- Keep the splash screen on screen for the duration of the launch animation -->
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <!-- After splash finishes, switch to this theme -->
+        <item name="postSplashScreenTheme">@style/Theme.PraesidiumNote</item>
+    </style>
+</resources>
