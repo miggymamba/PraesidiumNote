@@ -22,7 +22,7 @@ sealed class NoteResult<out T> {
          * 2. Persistence (SaveNote): Indicates a validation failure where both title
          * and content are empty or contain only whitespace.
          */
-        object EmptyNote : Error()
+        data object EmptyNote : Error()
 
         /** Indicates a failure in the SQLCipher/TEE encryption handshake. */
         data class EncryptionError(val message: String) : Error()
