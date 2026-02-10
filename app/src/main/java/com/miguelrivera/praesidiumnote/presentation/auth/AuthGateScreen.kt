@@ -35,7 +35,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miguelrivera.praesidiumnote.R
 import com.miguelrivera.praesidiumnote.presentation.navigation.NavActions
-import com.miguelrivera.praesidiumnote.presentation.ui.theme.PraesidiumNoteTheme
+import com.miguelrivera.praesidiumnote.presentation.theme.PraesidiumNoteTheme
 
 /**
  * Entry-point security gate.

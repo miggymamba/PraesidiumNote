@@ -1,4 +1,4 @@
-package com.miguelrivera.praesidiumnote.presentation.ui.theme
+package com.miguelrivera.praesidiumnote.presentation.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -8,27 +8,32 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = Silver,
     onPrimary = CharcoalGrey,
+    secondary = Silver,
+    onSecondary = CharcoalGrey,
     background = CharcoalGrey,
     onBackground = OffWhite,
     surface = Obsidian,
     onSurface = OffWhite,
-    error = AlertRed
+    error = AlertRed,
+    onError = OffWhite
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    onPrimary = Color.White,
+    primary = Obsidian,
+    onPrimary = PureWhite,
+    secondary = CharcoalGrey,
+    onSecondary = PureWhite,
     background = OffWhite,
-    onBackground = CharcoalGrey,
-    surface = Color.White,
-    onSurface = CharcoalGrey,
-    error = AlertRed
+    onBackground = Obsidian,
+    surface = PureWhite,
+    onSurface = Obsidian,
+    error = AlertRed,
+    onError = PureWhite
 )
 
 @Composable
