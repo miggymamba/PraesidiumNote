@@ -70,20 +70,3 @@ class AuthViewModel @Inject constructor(
         _uiState.value = AuthState.Idle
     }
 }
-
-/**
- * Represents the distinct states of the Authentication Screen.
- */
-sealed interface AuthState {
-    /** Waiting for user interaction. */
-    data object Idle : AuthState
-
-    /** Cryptographic material is being derived in the background. */
-    data object Loading : AuthState
-
-    /** User has successfully verified identity. Trigger navigation to Vault. */
-    data object Authenticated : AuthState
-
-    /** Authentication failed or hardware issue. Show feedback. */
-    data class Error(val message: String) : AuthState
-}

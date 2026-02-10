@@ -58,14 +58,3 @@ class NoteListViewModel @Inject constructor(
         }
     }
 }
-
-
-/**
- * MVI State for the Dashboard.
- */
-sealed class NoteListUiState {
-    data object Loading : NoteListUiState()
-    data object Empty : NoteListUiState()
-    data class Success(val notes: List<Note>) : NoteListUiState()
-    data class Error(val message: String) : NoteListUiState()
-}

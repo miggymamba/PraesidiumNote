@@ -7,30 +7,30 @@ package com.miguelrivera.praesidiumnote.domain.usecase
  * ensuring a predictable UI state and preventing unhandled exceptions
  * from leaking to the user.
  */
-sealed class NoteResult<out T> {
+sealed interface NoteResult<out T> {
 
     /** Represents a successful operation containing the resulting [data]. */
-    data class Success<out T>(val data: T) : NoteResult<T>()
+    data class Success<out T>(val data: T) : NoteResult<T>
 
     /** * Base class for all domain-specific failures.
      * Using a sealed sub-hierarchy allows for exhaustive 'when' expressions in ViewModels.
      */
-    sealed class Error : NoteResult<Nothing>() {
+    sealed interface Error : NoteResult<Nothing> {
 
         /** * Represents an empty state across two primary contexts:
          * 1. Retrieval (GetNotes): Indicates the database collection contains no records.
          * 2. Persistence (SaveNote): Indicates a validation failure where both title
          * and content are empty or contain only whitespace.
          */
-        data object EmptyNote : Error()
+        data object EmptyNote : Error
 
         /** Indicates a failure in the SQLCipher/TEE encryption handshake. */
-        data class EncryptionError(val message: String) : Error()
+        data class EncryptionError(val message: String) : Error
 
         /** Triggered when a specific record lookup fails for the provided [id]. */
-        data class NotFound(val id: String) : Error()
+        data class NotFound(val id: String) : Error
 
         /** A catch-all for non-domain specific failures (e.g., IO exceptions). */
-        data class Unknown(val message: String) : Error()
+        data class Unknown(val message: String) : Error
     }
 }
