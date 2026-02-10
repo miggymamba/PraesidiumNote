@@ -8,8 +8,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.miguelrivera.praesidiumnote.R
 
-// Set of Material typography styles to start with
-
 val Inter = FontFamily(
     Font(R.font.inter_regular,FontWeight.Normal),
     Font(R.font.inter_medium, FontWeight.Medium),
