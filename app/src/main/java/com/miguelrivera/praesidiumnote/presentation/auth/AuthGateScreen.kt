@@ -65,7 +65,7 @@ fun AuthGateScreen(
         onAuthenticate()
     }
 
-    // Navigation side-effect upon successful authentication
+    // Navigation side effect upon successful authentication
     LaunchedEffect(uiState) {
         if (uiState is AuthState.Authenticated) {
             navActions.navigateToNoteList()
@@ -84,7 +84,7 @@ fun AuthGateScreen(
  * Separated from the stateful wrapper to enable high-fidelity Compose Previews.
  */
 @Composable
-private fun AuthGateContent(
+internal fun AuthGateContent(
     uiState: AuthState,
     onAuthenticate: () -> Unit
 ) {
@@ -144,7 +144,7 @@ private fun AuthHeader(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
             painter = painter,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.cd_auth_icon),
             modifier = Modifier.size(AuthDimens.IconSize),
             tint = when {
                 isError -> MaterialTheme.colorScheme.error

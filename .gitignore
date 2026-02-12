@@ -34,7 +34,7 @@ local.properties
 # Individual module files (these are obsolete in modern Gradle projects but are a safe ignore)
 *.iml
 # Other machine/user specific files
-deploymentTargetDropDown.xml
+deploymentTargetSelector.xml
 render.experimental.xml
 misc.xml
 

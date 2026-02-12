@@ -97,7 +97,7 @@ fun NoteListScreen(
  * Separated to allow for Previews and Screenshot testing without Hilt dependencies.
  */
 @Composable
-fun NoteListContent(
+internal fun NoteListContent(
     uiState: NoteListUiState,
     snackbarHostState: SnackbarHostState,
     onAddNote: () -> Unit,

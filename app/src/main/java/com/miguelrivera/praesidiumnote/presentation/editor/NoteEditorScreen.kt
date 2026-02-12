@@ -100,7 +100,7 @@ fun NoteEditorScreen(
  * Separated to allow for Previews and Screenshot testing without Hilt dependencies.
  */
 @Composable
-fun NoteEditorContent(
+internal fun NoteEditorContent(
     uiState: NoteEditorUiState,
     snackbarHostState: SnackbarHostState,
     onTitleChange: (String) -> Unit,
