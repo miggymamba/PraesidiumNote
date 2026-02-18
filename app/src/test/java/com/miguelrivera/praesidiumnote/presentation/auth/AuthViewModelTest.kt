@@ -69,7 +69,7 @@ class AuthViewModelTest {
         // Then
         assertThat(viewModel.uiState.value).isInstanceOf(AuthState.Error::class.java)
         val state = viewModel.uiState.value as AuthState.Error
-        // Verify we handle the lockout state logic (checking if message contains 'lockout')
+        // Verify the lockout state logic is handled(checking if message contains 'lockout')
         assertThat(state.message.lowercase()).contains("too many attempts")
     }
 

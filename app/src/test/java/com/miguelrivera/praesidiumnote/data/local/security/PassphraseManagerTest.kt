@@ -81,7 +81,7 @@ class PassphraseManagerTest {
         val firstKey = passphraseManager.getPassphrase()
         val secondKey = passphraseManager.getPassphrase()
 
-        // Verify we aren't re-deriving (expensive) and using the RAM cache
+        // Verify that the app isn't re-deriving (expensive) and using the RAM cache
         assertThat(firstKey).isSameInstanceAs(secondKey)
     }
 }
