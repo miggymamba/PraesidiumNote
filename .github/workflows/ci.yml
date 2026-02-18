@@ -1,4 +1,4 @@
-name: Android CI
+name: PraesidiumNote CI
 
 on:
   push:
@@ -40,6 +40,17 @@ jobs:
         # Runs local JVM unit tests (MockK/JUnit).
         # This verifies Domain and ViewModel logic.
         run: ./gradlew testDebugUnitTest --stacktrace
+
+      - name: UI Tests (Instrumentation)
+        # Spins up an emulator to run Compose UI tests.
+        # Uses API 29 (Android 10) as it is the most stable x86_64 image on GitHub runners.
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: default
+          arch: x86_64
+          profile: Nexus 6
+          script: ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: Build Debug APK
         # Ensures the app actually compiles (catches Dagger/Hilt codegen errors).

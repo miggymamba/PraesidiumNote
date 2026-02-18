@@ -105,7 +105,7 @@ This project intentionally does not aim to:
 
 ## Sequence Diagram
 
-```
+```mermaid
 sequenceDiagram
     autonumber
     participant UI as UI Layer (Compose)
@@ -203,11 +203,11 @@ sequenceDiagram
 
 |Screen Name|Images|
 |---|---|
-|**Vault Gate**|<img src="docs/images/vault_gate_dark.png" width="300" alt="Vault Gate Dark" />|
-|**Vault Dashboard (Empty)**|<img src="docs/images/vault_dashboard_empty_dark.png" width="300" alt="Vault Dashboard Dark" />|
-|**Vault Dashboard (with Notes)**|<img src="docs/images/vault_dashboard_list_dark_one.png" width="300" alt="Vault List Dark One" /> <img src="docs/images/vault_dashboard_list_dark_two.png" width="300" alt="Vault List Dark Two" />|
-|**Secure Editor**|<img src="docs/images/vault_editor_dark.png" width="300" alt="Vault Editor Dark" /> <img src="docs/images/vault_editor_saved_dark.png" width="300" alt="Vault Editor Save Dark" />|
-|**Vault Deletion**|<img src="docs/images/vault_dashboard_dark_purge_dialog.png" width="300" alt="Vault Note Purge Dark" /> <img src="docs/images/vault_dashboard_dark_purge_dialog_done.png" width="300" alt="Vault Note Purge Done Dark" />|
+|**Vault Gate**|<img src="docs/images/vault_gate_dark.png" width="300" alt="Vault Gate (Dark)" />|
+|**Vault Dashboard (Empty)**|<img src="docs/images/vault_dashboard_empty_dark.png" width="300" alt="Vault Dashboard (Dark)" />|
+|**Vault Dashboard (with Notes)**|<img src="docs/images/vault_dashboard_list_dark_one.png" width="300" alt="Vault List (Dark) One" /> <img src="docs/images/vault_dashboard_list_dark_two.png" width="300" alt="Vault List (Dark) Two" />|
+|**Secure Editor**|<img src="docs/images/vault_editor_dark.png" width="300" alt="Vault Editor (Dark)" /> <img src="docs/images/vault_editor_saved_dark.png" width="300" alt="Vault Editor Save (Dark)" />|
+|**Vault Deletion**|<img src="docs/images/vault_dashboard_dark_purge_dialog.png" width="300" alt="Vault Note Purge (Dark)" /> <img src="docs/images/vault_dashboard_dark_purge_dialog_done.png" width="300" alt="Vault Note Purge Done (Dark)" />|
 
 ### Light Mode
 
@@ -215,9 +215,18 @@ sequenceDiagram
 |---|---|
 |**Vault Gate**|<img src="docs/images/vault_gate_light.png" width="300" alt="Vault Gate Light" />|
 |**Vault Dashboard (Empty)**|<img src="docs/images/vault_dashboard_empty_light.png" width="300" alt="Vault Dashboard Light" />|
-|**Vault Dashboard (with Notes)**|<img src="docs/images/vault_dashboard_list_light_one.png" width="300" alt="Vault List Light One" /> <img src="docs/images/vault_dashboard_list_light_two.png" width="300" alt="Vault List Light Two" />|
+|**Vault Dashboard (with Notes)**|<img src="docs/images/vault_dashboard_list_light_one.png" width="300" alt="Vault List (Light) One" /> <img src="docs/images/vault_dashboard_list_light_two.png" width="300" alt="Vault List (Light) Two" />|
 |**Secure Editor**|<img src="docs/images/vault_editor_light.png" width="300" alt="Vault Editor Light" /> <img src="docs/images/vault_editor_saved_light.png" width="300" alt="Vault Editor Save Light" />|
 |**Vault Deletion**|<img src="docs/images/vault_dashboard_light_purge_dialog.png" width="300" alt="Vault Note Purge Light" /> <img src="docs/images/vault_dashboard_light_purge_dialog_done.png" width="300" alt="Vault Note Purge Done Light" />|
+
+## Future Roadmap
+
+- **Memory Profiling:** Validation of heap hygiene effectiveness using the Android Profiler to ensure `CharArray` zeroing prevents data scraping.
+
+- **E2E Integration Tests:** Automation of the full security flow, from Biometric authentication to encrypted database persistence.
+
+- **Biometric Edge Cases:** Expanded UI tests to validate system lockout states and "Too many attempts" error handling.
+
 
 ## License
 
