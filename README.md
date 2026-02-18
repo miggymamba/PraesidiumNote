@@ -1,3 +1,5 @@
+[![Android CI](https://github.com/miggymamba/PraesidiumNote/actions/workflows/ci.yml/badge.svg)](https://github.com/miggymamba/PraesidiumNote/actions/workflows/ci.yml)
+
 # Praesidium Note
 
 **Praesidium Note** is an Android application built to explore how a privacy-first, zero-knowledge note system can be designed and maintained under real-world platform constraints.
