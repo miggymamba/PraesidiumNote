@@ -230,4 +230,4 @@ sequenceDiagram
 
 ## License
 
-Praesidium Note is compliant with **Apache License 2.0**. See [LICENSE](https://github.com/miggymamba/PraesidiumNote/blob/main/LICENSE) for more information.
+Praesidium Note is compliant with **Apache License 2.0**. See [LICENSE](LICENSE) for more information.
