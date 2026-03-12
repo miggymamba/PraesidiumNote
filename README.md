@@ -16,6 +16,29 @@ Rather than treating security as a bolt-on feature, the project approaches priva
 
 - **Anti-Memory Scraping:** Defensive coding patterns (using `CharArray`) to wipe data from the Java Heap.
 
+---
+
+## Tech Stack
+
+![Kotlin](https://img.shields.io/badge/Kotlin-2.3.10-7F52FF?logo=kotlin&logoColor=white)
+![KSP](https://img.shields.io/badge/KSP-2.3.6-7F52FF?logo=kotlin&logoColor=white)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)
+![Hilt](https://img.shields.io/badge/Hilt-DI-F8821A)
+![SQLCipher](https://img.shields.io/badge/SQLCipher-AES--256-red)
+![License](https://img.shields.io/badge/License-Apache%202.0-green)
+
+| Layer | Technology |
+|---|---|
+| UI | Jetpack Compose — Material 3 |
+| State | MVI — `StateFlow` + sealed interface |
+| DI | Hilt |
+| Database | Room + SQLCipher — AES-256 GCM encrypted |
+| Security | Android KeyStore — hardware-backed key storage |
+| Auth | BiometricPrompt — Fingerprint / Face |
+| Testing | JUnit 4 · MockK · ComposeTestRule |
+| CI | GitHub Actions |
+
+---
 
 ## Technical Architecture
 
@@ -31,7 +54,6 @@ The application is contained within a single `:app` module, heavily utilizing pa
 
 - **`data`**: Implementation of repositories, SQLCipher database (Room), and `AndroidKeyStore` interaction.
 
-
 ### Security Stack
 
 - **SQLCipher:** AES-256 GCM encryption at the SQLite level.
@@ -40,6 +62,7 @@ The application is contained within a single `:app` module, heavily utilizing pa
 
 - **Heap Hygiene:** Manual zeroing of `CharArray` to prevent sensitive data from lingering in the String Pool.
 
+---
 
 ## What This Project Demonstrates
 
@@ -63,6 +86,7 @@ This project is intended as a practical demonstration of the following skills an
 
 - Documenting non-goals, constraints, and assumptions to support long-term ownership
 
+---
 
 ## Development Setup
 
@@ -74,6 +98,7 @@ This project is intended as a practical demonstration of the following skills an
 
 4. **Note on Emulators:** If the emulator does not support hardware-backed Keystore, the app uses a deterministic fallback key for development purposes.
 
+---
 
 ## Testing Strategy
 
@@ -85,12 +110,13 @@ This project emphasizes meaningful testing over artificial coverage metrics.
 
 - UI composables are actively validated using Android instrumentation tests (`createComposeRule`) to verify visual states, user interactions, and empty/populated conditions.
 
-
 > ### Note on Biometrics Testing
 >
-> Android’s BiometricPrompt is tightly coupled to the framework lifecycle and system UI. As such, full end-to-end biometric flows are intentionally not unit-tested on the JVM, as doing so would require heavy mocking of internal framework state and produce unreliable tests.
+> Android's BiometricPrompt is tightly coupled to the framework lifecycle and system UI. As such, full end-to-end biometric flows are intentionally not unit-tested on the JVM, as doing so would require heavy mocking of internal framework state and produce unreliable tests.
 >
 > In production scenarios, these flows are best validated via instrumentation tests or manual QA on real hardware.
+
+---
 
 ## Non-Goals
 
@@ -102,9 +128,9 @@ This project intentionally does not aim to:
 
 - Simulate full biometric flows in JVM unit tests
 
+---
 
 ## Sequence Diagram
-
 ```mermaid
 sequenceDiagram
     autonumber
@@ -194,8 +220,9 @@ sequenceDiagram
 
     Note over VM: wipeLocalCharArrays()
     deactivate VM
-
 ```
+
+---
 
 ## Screenshots
 
@@ -219,6 +246,8 @@ sequenceDiagram
 |**Secure Editor**|<img src="docs/images/vault_editor_light.png" width="300" alt="Vault Editor Light" /> <img src="docs/images/vault_editor_saved_light.png" width="300" alt="Vault Editor Save Light" />|
 |**Vault Deletion**|<img src="docs/images/vault_dashboard_light_purge_dialog.png" width="300" alt="Vault Note Purge Light" /> <img src="docs/images/vault_dashboard_light_purge_dialog_done.png" width="300" alt="Vault Note Purge Done Light" />|
 
+---
+
 ## Future Roadmap
 
 - **Memory Profiling:** Validation of heap hygiene effectiveness using the Android Profiler to ensure `CharArray` zeroing prevents data scraping.
@@ -227,6 +256,7 @@ sequenceDiagram
 
 - **Biometric Edge Cases:** Expanded UI tests to validate system lockout states and "Too many attempts" error handling.
 
+---
 
 ## License
 

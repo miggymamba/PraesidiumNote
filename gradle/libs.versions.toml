@@ -9,7 +9,7 @@ appVersionName = "1.0.0"
 # Project & Tools
 agp = "9.1.0"
 kotlin = "2.3.10"
-ksp = "2.3.4"
+ksp = "2.3.6"
 
 # Core AndroidX
 coreKtx = "1.17.0"
