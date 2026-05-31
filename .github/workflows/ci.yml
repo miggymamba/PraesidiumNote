@@ -36,6 +36,14 @@ jobs:
       - name: Grant Execute Permission for Gradle
         run: chmod +x gradlew
 
+      - name: Free Disk Space (Ubuntu)
+        # Deletes pre-installed bloat to make room for the Android Emulator
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
       - name: Lint Check
         # Runs Android Lint to catch structural/formatting issues early.
         run: ./gradlew lintDebug --stacktrace
