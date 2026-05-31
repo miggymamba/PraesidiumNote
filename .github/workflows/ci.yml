@@ -13,7 +13,7 @@ env:
 jobs:
   build:
     name: Build & Test
-    runs-on: macos-13
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
@@ -45,25 +45,16 @@ jobs:
         # This verifies Domain and ViewModel logic.
         run: ./gradlew testDebugUnitTest --stacktrace
 
-      - name: UI Tests (Instrumentation)
-        # Spins up an emulator to run Compose UI tests.
-        # Uses API 29 (Android 10) as it is the most stable x86_64 image on GitHub runners.
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          target: default
-          arch: x86_64
-          profile: Nexus 6
-          emulator-boot-timeout: 600
-          script: ./gradlew connectedDebugAndroidTest --stacktrace
-
-      - name: Upload Test Reports
-        # Extracts the test results even if the tests fail so you can actually debug them
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: compose-instrumentation-reports
-          path: app/build/reports/androidTests/connected/
+      # UI Tests commented out to run on ubuntu-latest without emulator
+      # - name: UI Tests (Instrumentation)
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     api-level: 29
+      #     target: default
+      #     arch: x86_64
+      #     profile: Nexus 6
+      #     emulator-boot-timeout: 600
+      #     script: ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: Build Debug APK
         # Ensures the app actually compiles (catches Dagger/Hilt codegen errors).

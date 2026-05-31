@@ -30,12 +30,12 @@ Rather than treating security as a bolt-on feature, the project approaches priva
 | Layer | Technology |
 |---|---|
 | UI | Jetpack Compose — Material 3 |
-| State | MVI — `StateFlow` + sealed interface |
+| State | MVI — `StateFlow` (Persistent State) + `SharedFlow` (One-time Events) |
 | DI | Hilt |
 | Database | Room + SQLCipher — AES-256 GCM encrypted |
 | Security | Android KeyStore — hardware-backed key storage |
 | Auth | BiometricPrompt — Fingerprint / Face |
-| Testing | JUnit 4 · MockK · ComposeTestRule |
+| Testing | JUnit 4 · MockK · Turbine · ComposeTestRule |
 | CI | GitHub Actions |
 
 ---
@@ -48,7 +48,7 @@ Following the [Now in Android](https://github.com/android/nowinandroid) philosop
 
 The application is contained within a single `:app` module, heavily utilizing package-by-feature and package-by-layer structures to enforce boundaries:
 
-- **`presentation`**: Jetpack Compose UI, MVI/MVVM ViewModels, and UI state management.
+- **`presentation`**: Jetpack Compose UI, MVI/MVVM ViewModels, and UI state management. Implements a strict separation between persistent state (`StateFlow`) and transient one-time events (`SharedFlow`) to ensure UX consistency across configuration changes.
 
 - **`domain`**: The "Brain." Contains pure Kotlin Business Logic, UseCases, and Repository interfaces. **No Android dependencies.**
 
@@ -211,11 +211,9 @@ sequenceDiagram
     deactivate UC
 
     alt On Success
-        VM->>VM: Set isSaved = true
-        VM->>UI: Trigger Navigation Back
+        VM->>UI: Emit NavigateBack Event (SharedFlow)
     else On Failure
-        VM->>VM: Set error state
-        VM->>UI: Show Snackbar
+        VM->>UI: Emit ShowError Event (SharedFlow)
     end
 
     Note over VM: wipeLocalCharArrays()
