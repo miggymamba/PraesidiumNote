@@ -60,7 +60,7 @@ fun NoteEditorScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel.events) {
         viewModel.events.collect { event ->
             when (event) {
                 is NoteEditorEvent.NavigateBack -> {

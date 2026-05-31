@@ -6,9 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
@@ -55,19 +53,14 @@ class MainActivity : FragmentActivity() {
                     observer
                 }
 
-                CompositionLocalProvider(LocalNavActions provides navActions) {
-                    Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
-                        PraesidiumNavHost(
-                            navController = navController,
-                            modifier = Modifier.padding(paddingValues)
-                        )
-                    }
+                Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+                    PraesidiumNavHost(
+                        navController = navController,
+                        navActions = navActions,
+                        modifier = Modifier.padding(paddingValues)
+                    )
                 }
             }
         }
     }
-}
-
-val LocalNavActions = staticCompositionLocalOf<NavActions> {
-    error("No NavActions provided! Check MainActivity implementation.")
 }

@@ -36,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,7 +77,7 @@ fun NoteListScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel.events) {
         viewModel.events.collect { event ->
             when (event) {
                 is NoteListEvent.ShowError ->
@@ -108,7 +109,14 @@ internal fun NoteListContent(
     onDeleteClick: (Note) -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    var notePendingDeletion by remember { mutableStateOf<Note?>(null) }
+    var pendingDeletionNoteId by rememberSaveable { mutableStateOf<String?>(null) }
+    
+    val notePendingDeletion = remember(pendingDeletionNoteId, uiState) {
+        if (uiState is NoteListUiState.Success) {
+            uiState.notes.find { it.id == pendingDeletionNoteId }
+        } else null
+    }
+    
     val notePurgedMessage = stringResource(R.string.note_purged_message)
 
     Scaffold(
@@ -147,7 +155,7 @@ internal fun NoteListContent(
                     NoteLazyList(
                         notes = uiState.notes,
                         onNoteClick = { note -> onNoteClick(note.id) },
-                        onDeleteClick = { notePendingDeletion = it }
+                        onDeleteClick = { pendingDeletionNoteId = it.id }
                     )
                 }
                 is NoteListUiState.Error -> {
@@ -159,10 +167,10 @@ internal fun NoteListContent(
 
     DeleteConfirmationDialog(
         note = notePendingDeletion,
-        onDismiss = { notePendingDeletion = null },
+        onDismiss = { pendingDeletionNoteId = null },
         onConfirm = { note ->
             onDeleteClick(note)
-            notePendingDeletion = null
+            pendingDeletionNoteId = null
             scope.launch {
                 snackbarHostState.currentSnackbarData?.dismiss()
                 val snackbarJob = launch {

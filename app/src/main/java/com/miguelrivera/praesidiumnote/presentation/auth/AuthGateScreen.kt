@@ -61,7 +61,7 @@ fun AuthGateScreen(
     }
 
     // Auto-trigger biometric prompt on mount
-    LaunchedEffect(Unit) {
+    LaunchedEffect(authenticator) {
         onAuthenticate()
     }
 
