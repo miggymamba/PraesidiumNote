@@ -2,6 +2,7 @@ package com.miguelrivera.praesidiumnote.domain.usecase
 
 import com.miguelrivera.praesidiumnote.domain.model.Note
 import com.miguelrivera.praesidiumnote.domain.repository.NoteRepository
+import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
 /**
@@ -34,6 +35,8 @@ class SaveNoteUseCase @Inject constructor(
             note.clear()
 
             NoteResult.Success(Unit)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             // Map technical/cryptographic exceptions to domain-friendly results.
             if (e.message?.contains("SQLCipher", ignoreCase = true) == true) {

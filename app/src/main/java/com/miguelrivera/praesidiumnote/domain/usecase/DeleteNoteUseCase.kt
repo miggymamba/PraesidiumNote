@@ -2,6 +2,7 @@ package com.miguelrivera.praesidiumnote.domain.usecase
 
 import com.miguelrivera.praesidiumnote.domain.model.Note
 import com.miguelrivera.praesidiumnote.domain.repository.NoteRepository
+import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 
 /**
@@ -33,6 +34,8 @@ class DeleteNoteUseCase @Inject constructor(
             note.clear()
 
             NoteResult.Success(Unit)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception){
             NoteResult.Error.Unknown(e.localizedMessage ?: "Failed to delete Note.")
         }

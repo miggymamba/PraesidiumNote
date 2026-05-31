@@ -1,5 +1,6 @@
 package com.miguelrivera.praesidiumnote.domain.model
 
+import androidx.compose.runtime.Immutable
 import java.util.UUID
 
 /**
@@ -10,7 +11,9 @@ import java.util.UUID
  * This allows the app to overwrite sensitive content in memory as soon as
  * the persistence or display operation is complete.
  *
- * Note: This class is intentionally NOT annotated with @Immutable or @Stable.
+ * Annotated with [Immutable] to optimize Compose performance in list views.
+ * While the [CharArray] content is technically mutable via [clear], the object
+ * follows the stability contract for the duration of its lifecycle in the UI.
  *
  * @property id Unique identifier.
  * @property title Encrypted headline. Uses [CharArray] for manual memory wiping.
@@ -18,6 +21,7 @@ import java.util.UUID
  * @property timestamp Epoch time of last modification.
  * @property isLocked Indicates if biometric re-authentication is required.
  */
+@Immutable
 data class Note(
     val id: String = UUID.randomUUID().toString(),
     val title: CharArray,
