@@ -20,11 +20,19 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup JDK 17
+      - name: Free Disk Space (Ubuntu)
+        # Deletes pre-installed bloat to make room for the Android Emulator
+        # This must run BEFORE Setup JDK to avoid deleting the installed runtime.
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+
+      - name: Setup JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '21'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -35,14 +43,6 @@ jobs:
 
       - name: Grant Execute Permission for Gradle
         run: chmod +x gradlew
-
-      - name: Free Disk Space (Ubuntu)
-        # Deletes pre-installed bloat to make room for the Android Emulator
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /opt/ghc
-          sudo rm -rf "/usr/local/share/boost"
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
       - name: Lint Check
         # Runs Android Lint to catch structural/formatting issues early.
