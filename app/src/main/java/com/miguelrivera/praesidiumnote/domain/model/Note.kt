@@ -10,6 +10,8 @@ import java.util.UUID
  * This allows the app to overwrite sensitive content in memory as soon as
  * the persistence or display operation is complete.
  *
+ * Note: This class is intentionally NOT annotated with @Immutable or @Stable.
+ *
  * @property id Unique identifier.
  * @property title Encrypted headline. Uses [CharArray] for manual memory wiping.
  * @property content Encrypted body. Uses [CharArray] for manual memory wiping.

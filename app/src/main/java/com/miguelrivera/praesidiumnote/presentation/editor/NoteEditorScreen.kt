@@ -41,6 +41,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.miguelrivera.praesidiumnote.R
 import com.miguelrivera.praesidiumnote.presentation.navigation.NavActions
 import com.miguelrivera.praesidiumnote.presentation.theme.PraesidiumNoteTheme
+import com.miguelrivera.praesidiumnote.ui.editor.NoteEditorEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -59,29 +60,27 @@ fun NoteEditorScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
 
-    // Success synchronization: ensures UX continuity between persistence and navigation
-    LaunchedEffect(uiState.isSaved) {
-        if (uiState.isSaved) {
-            keyboardController?.hide()
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is NoteEditorEvent.NavigateBack -> {
+                    keyboardController?.hide()
 
-            // Snackbar is launched in a separate job to survive the popBackStack transition
-            scope.launch {
-                snackbarHostState.currentSnackbarData?.dismiss()
-                snackbarHostState.showSnackbar(noteSavedMessage)
+                    // Snackbar is launched in a separate job to survive the popBackStack transition
+                    scope.launch {
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                        snackbarHostState.showSnackbar(noteSavedMessage)
+                    }
+
+                    // Temporal buffer to allow IME dismissal and user perception of success state
+                    delay(1_000)
+                    navActions.navigateBack()
+                }
+                is NoteEditorEvent.ShowError -> {
+                    snackbarHostState.currentSnackbarData?.dismiss()
+                    snackbarHostState.showSnackbar(event.message)
+                }
             }
-
-            // Temporal buffer to allow IME dismissal and user perception of success state
-            delay(1_000)
-            navActions.navigateBack()
-        }
-    }
-
-    // Handle Error Side-effect
-    LaunchedEffect(uiState.error) {
-        uiState.error?.let { error ->
-            snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(error)
-            viewModel.clearError()
         }
     }
 

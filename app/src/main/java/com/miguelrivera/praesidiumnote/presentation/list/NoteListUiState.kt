@@ -1,5 +1,6 @@
 package com.miguelrivera.praesidiumnote.presentation.list
 
+import androidx.compose.runtime.Immutable
 import com.miguelrivera.praesidiumnote.domain.model.Note
 
 /**
@@ -17,9 +18,16 @@ sealed interface NoteListUiState {
     data object Empty : NoteListUiState
 
     /**
-     * Successfully retrieved notes from the vault.
-     * @property notes The encrypted notes decrypted for display.
+     * Represents the successful retrieval of notes from the vault.
+     *
+     * Annotated with [Immutable] to guarantee to the Compose compiler that the
+     * underlying [notes] list will not mutate after construction. This enables
+     * Compose to safely skip recomposition of list items when this state is passed
+     * down the hierarchy.
+     *
+     * @property notes The immutable list of [Note] instances to display.
      */
+    @Immutable
     data class Success(val notes: List<Note>) : NoteListUiState
 
     /**

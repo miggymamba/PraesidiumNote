@@ -9,9 +9,13 @@ import com.miguelrivera.praesidiumnote.domain.usecase.GetSingleNoteUseCase
 import com.miguelrivera.praesidiumnote.domain.usecase.NoteResult
 import com.miguelrivera.praesidiumnote.domain.usecase.SaveNoteUseCase
 import com.miguelrivera.praesidiumnote.presentation.navigation.Screen
+import com.miguelrivera.praesidiumnote.ui.editor.NoteEditorEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,6 +38,15 @@ class NoteEditorViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NoteEditorUiState())
     val uiState: StateFlow<NoteEditorUiState> = _uiState.asStateFlow()
+
+    /**
+     * Stream of transient one-time events.
+     *
+     * Backed by a [SharedFlow] to guarantee events are dropped if there are no
+     * active subscribers, preventing UI side effect replay on configuration changes.
+     */
+    private val _events = MutableSharedFlow<NoteEditorEvent>()
+    val events: SharedFlow<NoteEditorEvent> = _events.asSharedFlow()
 
     private val noteId: String? = try {
         savedStateHandle.toRoute<Screen.NoteDetail>().noteId
@@ -98,9 +111,9 @@ class NoteEditorViewModel @Inject constructor(
 
                 val result = saveNoteUseCase(noteToSave)
                 if (result is NoteResult.Success) {
-                    _uiState.update { it.copy(isSaved = true) }
+                    _events.emit(NoteEditorEvent.NavigateBack)
                 } else {
-                    _uiState.update { it.copy(error = "Failed to save Note.") }
+                    _events.emit(NoteEditorEvent.ShowError("Failed to save Note."))
                 }
             } finally {
                 //  Manual wipe of the local stack arrays

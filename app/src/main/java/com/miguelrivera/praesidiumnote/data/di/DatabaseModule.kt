@@ -45,7 +45,6 @@ abstract class DatabaseModule {
                 NoteDatabase.DATABASE_NAME
             )
                 .openHelperFactory(factory)
-                .fallbackToDestructiveMigration(dropAllTables = true)
                 .build()
                 .also {
                     // Security Requirement: Zero out key material from heap post-init.

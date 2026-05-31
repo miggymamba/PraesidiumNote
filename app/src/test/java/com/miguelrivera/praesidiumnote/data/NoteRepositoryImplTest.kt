@@ -1,5 +1,6 @@
 package com.miguelrivera.praesidiumnote.data
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.miguelrivera.praesidiumnote.data.local.database.dao.NoteDao
 import com.miguelrivera.praesidiumnote.data.local.database.entity.NoteEntity
@@ -10,12 +11,17 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
+/**
+ * Validates the [NoteRepositoryImpl] mapping logic and threading behavior.
+ *
+ * Uses Turbine to verify that data flows from the local DAO are correctly
+ * transformed into domain models and that termination is handled.
+ */
 class NoteRepositoryImplTest {
 
     private val noteDao: NoteDao = mockk(relaxed = true)
@@ -43,17 +49,20 @@ class NoteRepositoryImplTest {
         )
         every { noteDao.getAllNotes() } returns flowOf(listOf(entity))
 
-        // When
-        val result = repository.getNotes().first()
+        // When/Then
+        repository.getNotes().test {
+            val result = awaitItem()
+            assertThat(result).hasSize(1)
+            val domainNote = result[0]
 
-        // Then
-        assertThat(result).hasSize(1)
-        val domainNote = result[0]
+            assertThat(String(domainNote.title)).isEqualTo(entityTitle)
+            assertThat(String(domainNote.content)).isEqualTo(entityContent)
 
-        assertThat(String(domainNote.title)).isEqualTo(entityTitle)
-        assertThat(String(domainNote.content)).isEqualTo(entityContent)
-
-        assertThat(domainNote.title).isNotSameInstanceAs(entity.title)
+            // Verify deep copy was performed
+            assertThat(domainNote.title).isNotSameInstanceAs(entity.title)
+            
+            awaitComplete()
+        }
     }
 
     @Test
@@ -76,11 +85,14 @@ class NoteRepositoryImplTest {
 
     @Test
     fun `upsertNote converts domain model to entity and calls dao`() = runTest(testDispatcher) {
+        // Given
         val note = Note(id = "123", title = "T".toCharArray(), content = "C".toCharArray())
         coJustRun { noteDao.upsertNote(any()) }
 
+        // When
         repository.upsertNote(note)
 
+        // Then
         coVerify {
             noteDao.upsertNote(withArg { entity ->
                 assertThat(entity.id).isEqualTo("123")
@@ -91,11 +103,14 @@ class NoteRepositoryImplTest {
 
     @Test
     fun `deleteNote calls dao delete`() = runTest(testDispatcher) {
+        // Given
         val note = Note(id = "123", title = charArrayOf(), content = charArrayOf())
         coJustRun { noteDao.deleteNote(any()) }
 
+        // When
         repository.deleteNote(note)
 
+        // Then
         coVerify { noteDao.deleteNote(withArg { assertThat(it.id).isEqualTo("123") }) }
     }
 
@@ -105,12 +120,14 @@ class NoteRepositoryImplTest {
         val entity = NoteEntity("1", "Title".toCharArray(), "Content".toCharArray(), 0L, false)
         every { noteDao.getNote("1") } returns flowOf(entity)
 
-        // When
-        val result = repository.getNote("1").first()
-
-        // Then
-        assertThat(result).isNotNull()
-        assertThat(result?.id).isEqualTo("1")
-        assertThat(String(result!!.title)).isEqualTo("Title")
+        // When/Then
+        repository.getNote("1").test {
+            val result = awaitItem()
+            assertThat(result).isNotNull()
+            assertThat(result?.id).isEqualTo("1")
+            assertThat(String(result!!.title)).isEqualTo("Title")
+            
+            awaitComplete()
+        }
     }
 }

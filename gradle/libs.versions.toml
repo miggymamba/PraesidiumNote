@@ -46,6 +46,7 @@ mockk = "1.14.9"
 truth = "1.4.5"
 robolectric = "4.16.1"
 testCore = "1.7.0"
+turbine = "1.2.1"
 
 [libraries]
 # Core AndroidX
@@ -92,6 +93,7 @@ test-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 test-truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 test-navigation = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationCompose" }
 test-robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+test-turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 debug-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 debug-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 

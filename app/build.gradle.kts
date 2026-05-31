@@ -117,6 +117,7 @@ dependencies {
     testImplementation(libs.test.navigation)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.test.androidx.core)
+    testImplementation(libs.test.turbine)
 
     androidTestImplementation(libs.test.androidx.junit)
     androidTestImplementation(libs.test.androidx.espresso)

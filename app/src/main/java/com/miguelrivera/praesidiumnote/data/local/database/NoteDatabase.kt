@@ -10,11 +10,14 @@ import com.miguelrivera.praesidiumnote.data.local.database.util.Converters
 /**
  * The Room Database for this app.
  * Encrypted via SQLCipher as integrated in the [com.miguelrivera.praesidiumnote.data.di.DatabaseModule].
+ *
+ * Schema exports are explicitly enabled to allow CI pipelines to validate
+ * database migrations and prevent production regressions.
  */
 @Database(
     entities = [NoteEntity::class],
     version = 1,
-    exportSchema = false
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class NoteDatabase : RoomDatabase() {

@@ -76,9 +76,12 @@ fun NoteListScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(uiState) {
-        if (uiState is NoteListUiState.Error) {
-            snackbarHostState.showSnackbar((uiState as NoteListUiState.Error).message)
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is NoteListEvent.ShowError ->
+                    snackbarHostState.showSnackbar(event.message)
+            }
         }
     }
 
@@ -414,5 +417,13 @@ private fun NoteListContentPreview() {
 private fun EmptyVaultPreview() {
     PraesidiumNoteTheme {
         EmptyVaultPlaceholder()
+    }
+}
+
+@Preview(name = "Error Vault View", showBackground = true)
+@Composable
+private fun ErrorVaultPreview() {
+    PraesidiumNoteTheme {
+        ErrorVaultView("Failed retrieving notes.")
     }
 }

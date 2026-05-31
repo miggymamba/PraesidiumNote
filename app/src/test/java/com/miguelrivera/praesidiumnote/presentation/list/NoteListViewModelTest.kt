@@ -1,5 +1,6 @@
 package com.miguelrivera.praesidiumnote.presentation.list
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.miguelrivera.praesidiumnote.domain.model.Note
 import com.miguelrivera.praesidiumnote.domain.usecase.DeleteNoteUseCase
@@ -10,10 +11,7 @@ import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -21,10 +19,7 @@ import org.junit.Test
 /**
  * Validates the [NoteListViewModel] reactive state and user intents.
  *
- * Leverages [com.miguelrivera.praesidiumnote.rules.MainDispatcherRule] to control [viewModelScope] execution.
- * To test [stateIn] with [SharingStarted.WhileSubscribed], a collection should be launched
- * in the [backgroundScope]. This triggers the upstream flow and ensures the test
- * move past the 'Loading' initial state without manually mixing dispatchers.
+ * Leverages MainDispatcherRule and Turbine to validate StateFlow transitions.
  */
 class NoteListViewModelTest {
 
@@ -39,24 +34,18 @@ class NoteListViewModelTest {
     @Test
     fun `uiState transitions to Success when notes are retrieved`() = runTest {
         // Given
-        val mockNotes =
-            listOf(Note(id = "1", title = "T".toCharArray(), content = "C".toCharArray()))
+        val mockNotes = listOf(Note(id = "1", title = "T".toCharArray(), content = "C".toCharArray()))
         every { getNotesUseCase() } returns flowOf(NoteResult.Success(mockNotes))
 
         // When
         viewModel = NoteListViewModel(getNotesUseCase, deleteNoteUseCase)
 
-        // Use backgroundScope to collect the StateFlow.
-        // This triggers WhileSubscribed(5000) immediately using the Rule's dispatcher.
-        backgroundScope.launch { viewModel.uiState.collect() }
-
-        // Ensure all coroutines in the viewModelScope finish their mapping
-        advanceUntilIdle()
-
         // Then
-        assertThat(viewModel.uiState.value).isInstanceOf(NoteListUiState.Success::class.java)
-        val successState = viewModel.uiState.value as NoteListUiState.Success
-        assertThat(successState.notes).isEqualTo(mockNotes)
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertThat(state).isInstanceOf(NoteListUiState.Success::class.java)
+            assertThat((state as NoteListUiState.Success).notes).isEqualTo(mockNotes)
+        }
     }
 
     @Test
@@ -66,11 +55,11 @@ class NoteListViewModelTest {
 
         // When
         viewModel = NoteListViewModel(getNotesUseCase, deleteNoteUseCase)
-        backgroundScope.launch { viewModel.uiState.collect() }
-        advanceUntilIdle()
 
         // Then
-        assertThat(viewModel.uiState.value).isEqualTo(NoteListUiState.Empty)
+        viewModel.uiState.test {
+            assertThat(awaitItem()).isEqualTo(NoteListUiState.Empty)
+        }
     }
 
     @Test
@@ -82,26 +71,28 @@ class NoteListViewModelTest {
 
         // When
         viewModel = NoteListViewModel(getNotesUseCase, deleteNoteUseCase)
-        backgroundScope.launch { viewModel.uiState.collect() }
-
-        viewModel.deleteNote(note)
-        advanceUntilIdle()
 
         // Then
-        coVerify(exactly = 1) { deleteNoteUseCase(note) }
+        viewModel.uiState.test {
+            skipItems(1) // Skip initial state (Empty)
+            viewModel.deleteNote(note)
+            coVerify(exactly = 1) { deleteNoteUseCase(note) }
+        }
     }
 
     @Test
     fun `uiState transitions to Error when generic NoteResult Error occurs`() = runTest {
-        // NoteResult.Error.NotFound is a subclass of NoteResult.Error
+        // Given
         every { getNotesUseCase() } returns flowOf(NoteResult.Error.NotFound("123"))
 
+        // When
         viewModel = NoteListViewModel(getNotesUseCase, deleteNoteUseCase)
-        backgroundScope.launch { viewModel.uiState.collect() }
-        advanceUntilIdle()
 
-        assertThat(viewModel.uiState.value).isInstanceOf(NoteListUiState.Error::class.java)
-        val errorState = viewModel.uiState.value as NoteListUiState.Error
-        assertThat(errorState.message).isEqualTo("Failed to load vault.")
+        // Then
+        viewModel.uiState.test {
+            val state = awaitItem()
+            assertThat(state).isInstanceOf(NoteListUiState.Error::class.java)
+            assertThat((state as NoteListUiState.Error).message).isEqualTo("Failed to load vault.")
+        }
     }
 }

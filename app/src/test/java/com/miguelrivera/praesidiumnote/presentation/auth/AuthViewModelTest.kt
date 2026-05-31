@@ -1,5 +1,6 @@
 package com.miguelrivera.praesidiumnote.presentation.auth
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.miguelrivera.praesidiumnote.data.local.security.PassphraseManager
 import com.miguelrivera.praesidiumnote.rules.MainDispatcherRule
@@ -14,9 +15,8 @@ import org.junit.Test
 /**
  * Validates the AuthViewModel state machine.
  *
- * Utilizes MainDispatcherRule to override the Main dispatcher, preventing
- * crashes during viewModelScope execution. Verifies that the UI transitions
- * through the 'Loading' state during expensive cryptographic warmup.
+ * Utilizes MainDispatcherRule and Turbine to verify that the UI transitions through the 'Loading' state during expensive
+ * cryptographic warmup before reaching the 'Authenticated' state.
  */
 class AuthViewModelTest {
 
@@ -38,49 +38,69 @@ class AuthViewModelTest {
         // Given
         coJustRun { passphraseManager.warmup() }
 
-        // When
-        viewModel.onAuthResult(AuthResult.Success)
+        viewModel.uiState.test {
+            // Initial state
+            assertThat(awaitItem()).isEqualTo(AuthState.Idle)
 
-        // Then: Verify immediate transition to Loading
-        assertThat(viewModel.uiState.value).isEqualTo(AuthState.Loading)
+            // When
+            viewModel.onAuthResult(AuthResult.Success)
 
-        // Trigger the background work on the default dispatcher
-        testDefaultDispatcher.scheduler.advanceUntilIdle()
+            // Then: Verify transition to Loading
+            assertThat(awaitItem()).isEqualTo(AuthState.Loading)
 
-        // Then: Verify final state and logic execution
-        assertThat(viewModel.uiState.value).isEqualTo(AuthState.Authenticated)
-        coVerify(exactly = 1) { passphraseManager.warmup() }
+            // Trigger the background work on the default dispatcher
+            testDefaultDispatcher.scheduler.advanceUntilIdle()
+
+            // Then: Verify final Authenticated state
+            assertThat(awaitItem()).isEqualTo(AuthState.Authenticated)
+            coVerify(exactly = 1) { passphraseManager.warmup() }
+        }
     }
 
     @Test
     fun `onAuthResult UserCanceled returns state to Idle`() = runTest {
-        // When: User cancels the biometric prompt
-        viewModel.onAuthResult(AuthResult.UserCanceled)
+        viewModel.uiState.test {
+            assertThat(awaitItem()).isEqualTo(AuthState.Idle)
 
-        // Then: State should remain Idle (or return to it) so they can try again
-        assertThat(viewModel.uiState.value).isEqualTo(AuthState.Idle)
+            // When: User cancels the biometric prompt
+            viewModel.onAuthResult(AuthResult.UserCanceled)
+
+            // Then: State should remain Idle (or return to it) so they can try again
+            // Note: Since it was already Idle, StateFlow might not emit a new value.
+            // But if it was in another state, it would. 
+            // Given the logic: AuthResult.UserCanceled -> _uiState.value = AuthState.Idle
+            expectNoEvents()
+        }
     }
 
     @Test
     fun `onAuthResult LockedOut transitions to Error with specific message`() = runTest {
-        // When: Multiple failed attempts trigger a lockout
-        viewModel.onAuthResult(AuthResult.LockedOut(isPermanent = false))
+        viewModel.uiState.test {
+            assertThat(awaitItem()).isEqualTo(AuthState.Idle)
 
-        // Then
-        assertThat(viewModel.uiState.value).isInstanceOf(AuthState.Error::class.java)
-        val state = viewModel.uiState.value as AuthState.Error
-        // Verify the lockout state logic is handled(checking if message contains 'lockout')
-        assertThat(state.message.lowercase()).contains("too many attempts")
+            // When: Multiple failed attempts trigger a lockout
+            viewModel.onAuthResult(AuthResult.LockedOut(isPermanent = false))
+
+            // Then
+            val state = awaitItem()
+            assertThat(state).isInstanceOf(AuthState.Error::class.java)
+            assertThat((state as AuthState.Error).message.lowercase()).contains("too many attempts")
+        }
     }
 
     @Test
     fun `onAuthResult Error transitions to Error state`() = runTest {
-        // When
-        viewModel.onAuthResult(AuthResult.Error("Fingerprint rejected"))
+        viewModel.uiState.test {
+            assertThat(awaitItem()).isEqualTo(AuthState.Idle)
 
-        // Then
-        assertThat(viewModel.uiState.value).isInstanceOf(AuthState.Error::class.java)
-        assertThat((viewModel.uiState.value as AuthState.Error).message).isEqualTo("Fingerprint rejected")
+            // When
+            viewModel.onAuthResult(AuthResult.Error("Fingerprint rejected"))
+
+            // Then
+            val state = awaitItem()
+            assertThat(state).isInstanceOf(AuthState.Error::class.java)
+            assertThat((state as AuthState.Error).message).isEqualTo("Fingerprint rejected")
+        }
     }
 
     @Test
@@ -88,19 +108,34 @@ class AuthViewModelTest {
         // Given
         coEvery { passphraseManager.warmup() } throws Exception("Keystore failure")
 
-        // When
-        viewModel.onAuthResult(AuthResult.Success)
-        testDefaultDispatcher.scheduler.advanceUntilIdle()
+        viewModel.uiState.test {
+            assertThat(awaitItem()).isEqualTo(AuthState.Idle)
 
-        // Then
-        assertThat(viewModel.uiState.value).isInstanceOf(AuthState.Error::class.java)
+            // When
+            viewModel.onAuthResult(AuthResult.Success)
+            assertThat(awaitItem()).isEqualTo(AuthState.Loading)
+            
+            testDefaultDispatcher.scheduler.advanceUntilIdle()
+
+            // Then
+            assertThat(awaitItem()).isInstanceOf(AuthState.Error::class.java)
+        }
     }
 
     @Test
     fun `resetState returns UI to Idle`() = runTest {
-        viewModel.onAuthResult(AuthResult.Success)
-        viewModel.resetState()
-        assertThat(viewModel.uiState.value).isEqualTo(AuthState.Idle)
+        viewModel.uiState.test {
+            assertThat(awaitItem()).isEqualTo(AuthState.Idle)
+            
+            viewModel.onAuthResult(AuthResult.Success)
+            assertThat(awaitItem()).isEqualTo(AuthState.Loading)
+
+            // When
+            viewModel.resetState()
+
+            // Then
+            assertThat(awaitItem()).isEqualTo(AuthState.Idle)
+        }
     }
 }
 
