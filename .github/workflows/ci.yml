@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
 
-# Silences the Node.js 20 deprecation warning (Mandatory by June 16, 2026)
+# Silences the Node.js 20 deprecation warning
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -14,15 +14,14 @@ jobs:
   build:
     name: Build & Test
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Free Disk Space (Ubuntu)
-        # Deletes pre-installed bloat to make room for the Android Emulator
-        # This must run BEFORE Setup JDK to avoid deleting the installed runtime.
+        # Clears ~20GB of bloat to ensure the emulator has room to boot
         run: |
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
@@ -37,36 +36,32 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          # This automatically handles caching of the Gradle User Home
-          # and project-level cache, significantly speeding up subsequent builds.
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Grant Execute Permission for Gradle
         run: chmod +x gradlew
 
       - name: Lint Check
-        # Runs Android Lint to catch structural/formatting issues early.
         run: ./gradlew lintDebug --stacktrace
 
       - name: Unit Tests
-        # Runs local JVM unit tests (MockK/JUnit).
-        # This verifies Domain and ViewModel logic.
         run: ./gradlew testDebugUnitTest --stacktrace
 
       - name: UI Tests (Instrumentation)
-        # Spins up an emulator to run Compose UI tests.
-        # Ubuntu runners support KVM which makes the emulator usable.
+        # Using API 28 x86 for maximum stability and speed on Linux runners
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 28
           target: default
-          arch: x86_64
+          arch: x86
           profile: Nexus 6
+          disable-animations: true
           emulator-boot-timeout: 600
+          # Force a smaller partition size to avoid "Out of Space" errors
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 4096
           script: ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: Upload Test Reports
-        # Extracts the test results even if the tests fail so you can actually debug them
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -74,5 +69,4 @@ jobs:
           path: app/build/reports/androidTests/connected/
 
       - name: Build Debug APK
-        # Ensures the app actually compiles (catches Dagger/Hilt codegen errors).
         run: ./gradlew assembleDebug --stacktrace
