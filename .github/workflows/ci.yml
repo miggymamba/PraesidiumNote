@@ -6,10 +6,15 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# Silences the Node.js 20 deprecation warning (Mandatory by June 16, 2026)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     name: Build & Test
-    runs-on: ubuntu-latest
+    # macOS provides native hardware acceleration for stable Android emulators
+    runs-on: macos-latest
     timeout-minutes: 30
 
     steps:
@@ -50,8 +55,16 @@ jobs:
           target: default
           arch: x86_64
           profile: Nexus 6
-          boot-timeout: 600
+          emulator-boot-timeout: 600
           script: ./gradlew connectedDebugAndroidTest --stacktrace
+
+      - name: Upload Test Reports
+        # Extracts the test results even if the tests fail so you can actually debug them
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compose-instrumentation-reports
+          path: app/build/reports/androidTests/connected/
 
       - name: Build Debug APK
         # Ensures the app actually compiles (catches Dagger/Hilt codegen errors).
