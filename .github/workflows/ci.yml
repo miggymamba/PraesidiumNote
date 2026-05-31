@@ -48,17 +48,18 @@ jobs:
         run: ./gradlew testDebugUnitTest --stacktrace
 
       - name: UI Tests (Instrumentation)
-        # Using API 28 x86 for maximum stability and speed on Linux runners
+        # Utilizes a stable API level and x86_64 architecture for reliable Linux execution.
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 28
+          api-level: 29
           target: default
-          arch: x86
+          arch: x86_64
           profile: Nexus 6
+          force-avd-creation: true
           disable-animations: true
           emulator-boot-timeout: 600
-          # Force a smaller partition size to avoid "Out of Space" errors
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -partition-size 4096
+          # Standard stable options for headless execution on Linux runners.
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: Upload Test Reports

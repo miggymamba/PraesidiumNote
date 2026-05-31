@@ -22,7 +22,7 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(
     application = TestPraesidiumApp::class,
-    sdk = [33] // This is the critical fix for the "Bad return type" error
+    sdk = [33]
 )
 class PassphraseManagerTest {
 
