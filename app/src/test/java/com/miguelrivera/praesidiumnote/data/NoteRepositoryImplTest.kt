@@ -1,8 +1,9 @@
-package com.miguelrivera.praesidiumnote.data.repository
+package com.miguelrivera.praesidiumnote.data
 
 import com.google.common.truth.Truth.assertThat
 import com.miguelrivera.praesidiumnote.data.local.database.dao.NoteDao
 import com.miguelrivera.praesidiumnote.data.local.database.entity.NoteEntity
+import com.miguelrivera.praesidiumnote.data.repository.NoteRepositoryImpl
 import com.miguelrivera.praesidiumnote.domain.model.Note
 import io.mockk.coJustRun
 import io.mockk.coVerify
