@@ -48,17 +48,17 @@ jobs:
         run: ./gradlew testDebugUnitTest --stacktrace
 
       - name: UI Tests (Instrumentation)
-        # Utilizes a stable API level and x86_64 architecture for reliable Linux execution.
+        # Using API 27 x86 for absolute stability on Linux runners.
+        # This version is lighter on resources and more responsive to ADB commands.
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: 27
           target: default
-          arch: x86_64
+          arch: x86
           profile: Nexus 6
           force-avd-creation: true
           disable-animations: true
           emulator-boot-timeout: 600
-          # Standard stable options for headless execution on Linux runners.
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: ./gradlew connectedDebugAndroidTest --stacktrace
 
