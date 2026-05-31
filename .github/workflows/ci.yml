@@ -13,8 +13,7 @@ env:
 jobs:
   build:
     name: Build & Test
-    # macOS provides native hardware acceleration for stable Android emulators
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
